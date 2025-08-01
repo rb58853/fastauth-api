@@ -1,0 +1,11 @@
+{
+    "app-name": "fastauth",
+    "database-api-url": "http://127.0.0.1/my_db",
+    "master-token": "<your-master-token>",
+    "master-paths": [
+        "list of your root endpoints that need master token for use"
+    ],
+    "access-paths": [
+        "list of your root endpoints that need access token for use"
+    ]
+}

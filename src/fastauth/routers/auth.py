@@ -1,15 +1,16 @@
 from fastapi.routing import APIRouter
 
+
 class TokenRouter:
     def __init__(self, prefix: str = "/auth", tags: list[str] = ["auth"]):
         self.prefix = prefix
         self.tags = tags
 
     @property
-    def router(self):
-        _router = APIRouter(prefix=self.prefix, tags=self.tags)
-        self.__registry_routes(_router)
-        return _router
+    def route(self):
+        _route = APIRouter(prefix=self.prefix, tags=self.tags)
+        self.__registry_routes(_route)
+        return _route
 
     def __registry_routes(self, router: APIRouter):
         @router.get("/token/access/{client_id}")

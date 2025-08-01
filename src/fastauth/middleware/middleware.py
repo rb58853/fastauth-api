@@ -37,9 +37,9 @@ class AccessTokenMiddleware(BaseHTTPMiddleware):
 
     def __check_access(self, req: Request) -> Response | None:
         if require_access_token(req):
-            username: str | None = Params(req).get_param("username")
+            client_id: str | None = Params(req).get_param("client_id")
             access_token: str = req.headers.get("ACCESS-TOKEN")
-            required_token: str = get_key(username)
+            required_token: str = get_key(client_id)
 
         return None
 

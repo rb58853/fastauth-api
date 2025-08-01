@@ -24,5 +24,5 @@ class Params:
 def match_key(recived_key, key):
     return key == recived_key
 
-def get_key(username: str):
-    return os.getenv("USER_TOKEN")
+def get_key(client_id: str):
+    return "<client_token>"

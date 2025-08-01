@@ -1,16 +1,27 @@
 from fastapi.routing import APIRouter
-from fastapi.security import OAuth2PasswordBearer
 
+class TokenRouter:
+    def __init__(self, prefix: str = "/auth", tags: list[str] = ["auth"]):
+        self.prefix = prefix
+        self.tags = tags
 
-router = APIRouter(prefix="/auth", tags=["auth"])
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
+    @property
+    def router(self):
+        _router = APIRouter(prefix=self.prefix, tags=self.tags)
+        self.__registry_routes(_router)
+        return _router
 
+    def __registry_routes(self, router: APIRouter):
+        @router.get("/token/access/{client_id}")
+        async def access_token(client_id: str):
+            return self.__access_token(client_id=client_id)
 
-@router.get("/token/access/{client_id}")
-async def access_token(client_id: str):
-    pass
+        @router.get("/token/refresh/{client_id}")
+        async def refresh_token(client_id: str):
+            return self.__refresh_token(client_id)
 
+    def __access_token(client_id: str):
+        pass
 
-@router.get("/token/refresh/{client_id}")
-async def refresh_token(client_id: str):
-    pass
+    def __refresh_token(client_id: str):
+        pass

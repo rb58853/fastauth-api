@@ -3,17 +3,26 @@ from fastapi.openapi.utils import get_openapi
 
 
 class CustomOpenAPI:
-    def __init__(self, app: FastAPI):
-        self.app = app
+    def __init__(
+        self,
+        app: FastAPI,
+        title: str = "Custom API",
+        version: str = "0.0.0",
+        description="Custom OpenAPI schema with token authorization",
+    ):
+        self.app: FastAPI = app
+        self.title: str = title
+        self.version: str = version
+        self.description: str = description
 
     def __call__(self):
         if self.app.openapi_schema:
             return self.app.openapi_schema
 
         openapi_schema = get_openapi(
-            title="Cliniscript API",
-            version="0.0.1",
-            description="Custom OpenAPI schema with token authorization",
+            title=self.title,
+            version=self.version,
+            description=self.description,
             routes=self.app.routes,
         )
 

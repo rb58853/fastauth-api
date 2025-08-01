@@ -7,14 +7,14 @@ def websocket_middleware(func):
     @wraps(func)
     async def wrapper(websocket: WebSocket, *args, **kwargs):
         params = Params(websocket)
-        username = params.get_param("username")
+        client_id = params.get_param("client_id")
         request_api_key = websocket.headers.get("API-KEY")
-        user_key = get_key(username)
+        client_key = get_key(client_id)
 
         print(f"api_key: {request_api_key}")
-        print(f"user-key: {user_key}")
+        print(f"client-key: {client_key}")
 
-        if request_api_key is None or not match_key(request_api_key, user_key):
+        if request_api_key is None or not match_key(request_api_key, client_key):
             await websocket.accept()
             await websocket.send_json(
                 {"status": "disconnected", "detail": "Unauthrized api-key"}

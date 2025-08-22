@@ -11,9 +11,6 @@ def websocket_middleware(func):
         request_api_key = websocket.headers.get("API-KEY")
         client_key = get_key(client_id)
 
-        print(f"api_key: {request_api_key}")
-        print(f"client-key: {client_key}")
-
         if request_api_key is None or not match_key(request_api_key, client_key):
             await websocket.accept()
             await websocket.send_json(
@@ -26,5 +23,3 @@ def websocket_middleware(func):
             return await func(websocket, *args, **kwargs)
 
     return wrapper
-
-

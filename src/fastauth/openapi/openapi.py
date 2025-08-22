@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.openapi.utils import get_openapi
 
 
-class CustomOpenAPI:
+class FastauthOpenAPI:
     def __init__(
         self,
         app: FastAPI,

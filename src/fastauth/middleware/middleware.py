@@ -3,9 +3,8 @@ from http import HTTPStatus
 from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.responses import Response, JSONResponse
 
-from ..config.logger import logger
-from ..config.server import ConfigServer
 from .utils import Params, get_key
+from ..config import logger, ConfigServer
 
 
 class AccessTokenMiddleware(BaseHTTPMiddleware):

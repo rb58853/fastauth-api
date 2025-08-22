@@ -1,11 +1,9 @@
-import time
 import datetime
 from jose import jwt
 from http import HTTPStatus
 from fastapi.routing import APIRouter
-from ..config.logger import logger
-from ..config.server import ConfigServer, TokenConfig
-from ..client_db.client_db import save_token, load_token
+from ..config import logger, TokenConfig
+from ..client_db.client_db import save_token
 from ..models.responses.standart import standard_response
 
 
@@ -25,20 +23,87 @@ class TokenRouter:
         return _route
 
     def __registry_routes(self, router: APIRouter):
-        @router.get("/token/access/{client_id}")
-        async def access_token(client_id: str):
+        """
+        If your need custom access token generation logic, you can overwrite the methods
+        `__generate_access_token` and `__refresh_access_token` in this class.
+        If you don't need custom logic, you can use the default implementation provided by `BaseTokenGeneration`.
+        The default implementation uses the `BaseTokenGeneration` class to generate access and refresh tokens
+        based on the `client_id` or `refresh_token` provided.
+        """
+
+        @router.get("/token/access")
+        async def generate_access_token(client_id: str):
+            """
+            Generates and returns an access token (and refresh token) for the provided `client_id`.
+            This endpoint is used to obtain a new access token (and refresh token), which can be used to authenticate and authorize subsequent requests.
+            Provide a valid client ID as a query parameter to receive a token associated with that client.
+            Args:
+                client_id (str): The unique identifier of the client requesting the access token.
+            Returns:
+                dict: A dictionary containing the generated access token and refresh token into `"data"` key.
+            Example:
+                `GET /auth//token/access?client_id=your_client_id`
+            Note:
+                The access token should be included in the Authorization header for protected endpoints.
+            """
             return self.__generate_access_token(client_id=client_id)
 
-        @router.get("/token/refresh/{client_id}")
-        async def refresh_token(refresh_token: str):
+        @router.get("/token/refresh")
+        async def refresh_access_token(refresh_token: str):
+            """
+            Generates and returns an access token (and refresh token) for the provided `refresh_token`.
+            This endpoint is used to obtain a new access token (and refresh token), which can be used to authenticate and authorize subsequent requests.
+            Provide a valid client ID as a query parameter to receive a token associated with that client.
+            Args:
+                client_id (str): The unique identifier of the client requesting the access token.
+            Returns:
+                dict: A dictionary containing the generated access token and refresh token into `"data"` key.
+            Example:
+                `GET /auth//token/access?client_id=your_client_id`
+            Note:
+                The access token should be included in the Authorization header for protected endpoints.
+            """
             return self.__refresh_access_token(refresh_token=refresh_token)
 
     def __generate_access_token(client_id: str):
+        """
+        This method is intended to be overwritten by developers if custom access token generation logic is required.
+        It generates and returns an access token and refresh token for the given `client_id`.
+        Returns:
+            dict: Dict response like
+            ```
+            {
+                status="success",
+                message="Token generated",
+                code=HTTPStatus.OK,
+                data={
+                    "access-token": access_token,
+                    "refresh_token": refresh_token,
+                }
+            }
+            ```
+        """
         return BaseTokenGeneration.generate_access_token(client_id=client_id)
 
     def __refresh_access_token(refresh_token: str):
+        """
+        This method is intended to be overwritten by developers if custom access token generation logic is required.
+        It generates and returns an access token and refresh token for the given `refresh_token`.
+        Returns:
+            dict: Dict response like
+            ```
+            {
+                status="success",
+                message="Token generated",
+                code=HTTPStatus.OK,
+                data={
+                    "access-token": access_token,
+                    "refresh_token": refresh_token,
+                }
+            }
+            ```
+        """
         return BaseTokenGeneration.refresh_access_token(refresh_token=refresh_token)
-        pass
 
 
 class BaseTokenGeneration:

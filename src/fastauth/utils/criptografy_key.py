@@ -25,3 +25,6 @@ def generate_criptografy_key(add2env: bool = True):
         + "added to .env file"
     )
     return key
+
+if __name__ == "__main__":
+    generate_criptografy_key()

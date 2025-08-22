@@ -31,7 +31,7 @@ class TokenRouter:
         based on the `client_id` or `refresh_token` provided.
         """
 
-        @router.get("/token/access")
+        @router.get("/token/access/{client_id}")
         async def generate_access_token(client_id: str):
             """
             Generates and returns an access token (and refresh token) for the provided `client_id`.
@@ -42,13 +42,13 @@ class TokenRouter:
             Returns:
                 dict: A dictionary containing the generated access token and refresh token into `"data"` key.
             Example:
-                `GET /auth//token/access?client_id=your_client_id`
+                `GET /auth//token/access/your_client_id`
             Note:
                 The access token should be included in the Authorization header for protected endpoints.
             """
             return self.__generate_access_token(client_id=client_id)
 
-        @router.get("/token/refresh")
+        @router.get("/token/refresh/{refresh_token}")
         async def refresh_access_token(refresh_token: str):
             """
             Generates and returns an access token (and refresh token) for the provided `refresh_token`.
@@ -59,7 +59,7 @@ class TokenRouter:
             Returns:
                 dict: A dictionary containing the generated access token and refresh token into `"data"` key.
             Example:
-                `GET /auth//token/access?client_id=your_client_id`
+                `GET /auth//token/refresh/your_refresh_token`
             Note:
                 The access token should be included in the Authorization header for protected endpoints.
             """

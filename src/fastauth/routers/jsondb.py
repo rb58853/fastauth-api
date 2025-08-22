@@ -1,13 +1,13 @@
-from fastapi import APIRouter, HTTPException, status
-from fastapi.responses import JSONResponse
-from pydantic import BaseModel
-from typing import Any, Dict
-import json
 import os
+import json
 from threading import Lock
+from typing import Any, Dict
+from pydantic import BaseModel
+from fastapi.responses import JSONResponse
+from fastapi import APIRouter, HTTPException, status
 from ..models.responses.standart import standard_response
 
-router = APIRouter(prefix="/data", tags=["data"])
+router = APIRouter(prefix="/my_db", tags=["data"])
 DB_FILE = "simple_db.json"
 db_lock = Lock()
 
@@ -32,7 +32,7 @@ def save_db(db: Dict[str, Any]) -> None:
         json.dump(db, f, indent=4)
 
 
-@router.get("/data/token/{client_id}", response_model=DataModel)
+@router.get("/data/token", response_model=DataModel)
 def get_data(client_id: str):
     """
     Retrieve data for a given client_id from the JSON database.
@@ -53,7 +53,7 @@ def get_data(client_id: str):
         )
 
 
-@router.post("/data/token/{client_id}", response_model=DataModel)
+@router.post("/data/token", response_model=DataModel)
 def save_data(client_id: str, payload: DataModel):
     """
     Save or update data for a given client_id in the JSON database.

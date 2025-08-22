@@ -2,7 +2,7 @@ import httpx
 from typing import Optional
 
 
-DATABASE_API_URL: str = "http://localhost:8000/data/token"
+DATABASE_API_URL: str = "http://localhost:8000/data"
 
 
 def save_token(
@@ -21,7 +21,7 @@ def save_token(
     Returns:
         bool: True if the tokens were saved successfully, False otherwise.
     """
-    url = f"{DATABASE_API_URL}/save?client_id={client_id}"
+    url = f"{DATABASE_API_URL}/token/save?client_id={client_id}"
     payload = {"access_token": access_token, "refresh_token": refresh_token}
 
     response = httpx.post(url, json=payload)
@@ -38,7 +38,7 @@ def load_access_token(client_id: str) -> Optional[str]:
     Returns:
         Optional[str]: The access token if found, None otherwise.
     """
-    url = f"{DATABASE_API_URL}/load?client_id={client_id}"
+    url = f"{DATABASE_API_URL}/token/load?client_id={client_id}"
     response = httpx.get(url)
     if response.status_code == 200:
         data = response.json()
@@ -56,7 +56,7 @@ def load_refresh_token(client_id: str) -> Optional[str]:
     Returns:
         Optional[str]: The refresh token if found, None otherwise.
     """
-    url = f"{DATABASE_API_URL}/load?client_id={client_id}"
+    url = f"{DATABASE_API_URL}/token/load?client_id={client_id}"
     response = httpx.get(url)
     if response.status_code == 200:
         data = response.json()

@@ -5,9 +5,35 @@ from fastapi.routing import APIRouter
 from ..config import logger, TokenConfig
 from ..client_db.client_db import save_token
 from ..models.responses.standart import standard_response
+from fastauth.routers.auth import TokenRouter
 
 
 class TokenRouter:
+    """
+    TokenRouter provides a modular authentication route handler for FastAPI applications, enabling easy integration of token-based authentication endpoints.
+    
+    ## Usage
+    - Instantiate TokenRouter and use its `route` property to obtain an APIRouter with pre-configured `/token/access` and `/token/refresh` endpoints.
+    - Pass the resulting router to your FastAPI app using `app.include_router(token_router.route)`.
+    Customization:
+    - To implement custom token generation logic, subclass TokenRouter and override the `__generate_access_token` and/or `__refresh_access_token` methods.
+    Properties:
+    - route: Returns an APIRouter instance with authentication endpoints for access and refresh token generation.
+    
+    ## Example    
+    ```python
+    token_router = TokenRouter()
+    app.include_router(token_router.route)
+    # For custom logic:
+    class CustomTokenRouter(TokenRouter):
+        def __generate_access_token(self, client_id: str):
+            # Custom implementation here
+            pass
+    custom_router = CustomTokenRouter()
+    app.include_router(custom_router.route)
+    ```
+    """
+
     def __init__(
         self,
         prefix: str = "/auth",
@@ -18,6 +44,7 @@ class TokenRouter:
 
     @property
     def route(self):
+
         _route = APIRouter(prefix=self.prefix, tags=self.tags)
         self.__registry_routes(_route)
         return _route
@@ -31,7 +58,7 @@ class TokenRouter:
         based on the `client_id` or `refresh_token` provided.
         """
 
-        @router.get("/token/access/{client_id}")
+        @router.get("/token/access")
         async def generate_access_token(client_id: str):
             """
             Generates and returns an access token (and refresh token) for the provided `client_id`.
@@ -42,13 +69,13 @@ class TokenRouter:
             Returns:
                 dict: A dictionary containing the generated access token and refresh token into `"data"` key.
             Example:
-                `GET /auth//token/access/your_client_id`
+                `GET /auth//token/access?client_id=your_client_id`
             Note:
                 The access token should be included in the Authorization header for protected endpoints.
             """
             return self.__generate_access_token(client_id=client_id)
 
-        @router.get("/token/refresh/{refresh_token}")
+        @router.get("/token/refresh")
         async def refresh_access_token(refresh_token: str):
             """
             Generates and returns an access token (and refresh token) for the provided `refresh_token`.
@@ -59,7 +86,7 @@ class TokenRouter:
             Returns:
                 dict: A dictionary containing the generated access token and refresh token into `"data"` key.
             Example:
-                `GET /auth//token/refresh/your_refresh_token`
+                `GET /auth//token/refresh?refresh_token=your_refresh_token`
             Note:
                 The access token should be included in the Authorization header for protected endpoints.
             """

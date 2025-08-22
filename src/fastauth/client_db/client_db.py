@@ -7,9 +7,17 @@ Cliente que conecta con la base de datos. Es imprescindible que la base de datos
 DATABASE_API_URL: str = ""
 
 
-async def save_token(client_id: str, token: str) -> bool:
+async def save_token(
+    client_id: str,
+    access_token: str,
+    refresh_token: str,
+) -> bool:
     pass
 
 
-def load_token(client_id: str) -> str:
+def load_access_token(client_id: str) -> str:
+    pass
+
+
+def load_refresh_token(client_id: str) -> str:
     pass

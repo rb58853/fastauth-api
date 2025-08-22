@@ -6,7 +6,7 @@ class CustomOpenAPI:
     def __init__(
         self,
         app: FastAPI,
-        title: str = "Custom API",
+        title: str = "Fastauth API",
         version: str = "0.0.0",
         description="Custom OpenAPI schema with token authorization",
     ):

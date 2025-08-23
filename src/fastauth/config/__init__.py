@@ -1,2 +1,2 @@
-from logger import logger
-from server import ConfigServer, TokenConfig
+from .logger import logger
+from .server import ConfigServer, TokenConfig

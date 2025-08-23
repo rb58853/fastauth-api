@@ -1,1 +1,1 @@
-from openapi import FastauthOpenAPI
+from .openapi import FastauthOpenAPI

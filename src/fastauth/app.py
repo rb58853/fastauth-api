@@ -6,7 +6,7 @@ from .routers import TokenRouter, jsondb_router
 
 def set_auth(
     fastapp: FastAPI,
-    routes: list[APIRouter] = [
+    routers: list[APIRouter] = [
         TokenRouter().route,
         jsondb_router,
     ],
@@ -17,5 +17,5 @@ def set_auth(
     fastapp.add_middleware(AccessTokenMiddleware)
     openapi: FastauthOpenAPI = FastauthOpenAPI(app=fastapp)
     fastapp.openapi = lambda: openapi()
-    for route in routes:
-        fastapp.add_route(route=route)
+    for router in routers:
+        fastapp.include_router(router=router)

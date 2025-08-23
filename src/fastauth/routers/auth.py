@@ -5,7 +5,6 @@ from fastapi.routing import APIRouter
 from ..config import logger, TokenConfig
 from ..client_db.client_db import save_token
 from ..models.responses.standart import standard_response
-from fastauth.routers.auth import TokenRouter
 
 
 class TokenRouter:

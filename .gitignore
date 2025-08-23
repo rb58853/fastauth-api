@@ -4,3 +4,10 @@ fastauth.config.json
 
 # Python cache files
 *.pyc
+
+# Development files
+xbuild.md
+
+# Build files
+dist/*
+src/fastauth_api.egg-info/*

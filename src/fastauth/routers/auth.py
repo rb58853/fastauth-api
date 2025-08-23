@@ -11,7 +11,7 @@ from fastauth.routers.auth import TokenRouter
 class TokenRouter:
     """
     TokenRouter provides a modular authentication route handler for FastAPI applications, enabling easy integration of token-based authentication endpoints.
-    
+
     ## Usage
     - Instantiate TokenRouter and use its `route` property to obtain an APIRouter with pre-configured `/token/access` and `/token/refresh` endpoints.
     - Pass the resulting router to your FastAPI app using `app.include_router(token_router.route)`.
@@ -19,8 +19,8 @@ class TokenRouter:
     - To implement custom token generation logic, subclass TokenRouter and override the `__generate_access_token` and/or `__refresh_access_token` methods.
     Properties:
     - route: Returns an APIRouter instance with authentication endpoints for access and refresh token generation.
-    
-    ## Example    
+
+    ## Example
     ```python
     token_router = TokenRouter()
     app.include_router(token_router.route)
@@ -43,13 +43,12 @@ class TokenRouter:
         self.tags = tags
 
     @property
-    def route(self):
-
+    def route(self) -> APIRouter:
         _route = APIRouter(prefix=self.prefix, tags=self.tags)
-        self.__registry_routes(_route)
+        self.__registry_enpoints(_route)
         return _route
 
-    def __registry_routes(self, router: APIRouter):
+    def __registry_enpoints(self, router: APIRouter):
         """
         If your need custom access token generation logic, you can overwrite the methods
         `__generate_access_token` and `__refresh_access_token` in this class.

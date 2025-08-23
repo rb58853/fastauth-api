@@ -5,7 +5,12 @@ def write_key(key, name, file_path=".env", override: bool = True) -> None:
     base_dir = os.getcwd()
     file_path = os.path.join(base_dir, file_path)
     dir_path = "/".join(file_path.split("/")[:-1]) + os.path.sep
-    os.makedirs(os.path.dirname(dir_path), exist_ok=True)
+    
+    if not os.path.exists(file_path):
+        with open(file_path, "w") as file:
+            file.write("")
+
+    # os.makedirs(os.path.dirname(dir_path), exist_ok=True)
 
     new_lines = []
     with open(file_path, "r+") as file:
@@ -52,6 +57,9 @@ def read_key(name, file_path=".env") -> str | None:
 
 
 def key_in(name, file_path=".env") -> bool:
+    if os.path.exists(file_path) is False:
+        return False
+
     with open(file_path, "r+") as file:
         lines = file.readlines()
         for line in lines:

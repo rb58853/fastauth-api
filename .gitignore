@@ -1,1 +1,6 @@
+# Secret files
 fastauth.config.json
+.env
+
+# Python cache files
+*.pyc

@@ -3,12 +3,11 @@ import json
 from threading import Lock
 from typing import Any, Dict
 from pydantic import BaseModel
-from fastapi.responses import JSONResponse
-from fastapi import APIRouter, HTTPException, status
+from fastapi import APIRouter, status
 from ..models.responses.standart import standard_response
 
 router = APIRouter(prefix="/my_db", tags=["data"])
-DB_FILE = "simple_db.json"
+DB_FILE = "database/simple_db.json"
 db_lock = Lock()
 
 

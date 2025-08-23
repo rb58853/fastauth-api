@@ -1,5 +1,5 @@
 from cryptography.fernet import Fernet
-from .envfile import write_key, key_in
+from envfile import write_key, key_in
 
 VAR_NAME = "CRIPTOGRAFY_KEY"
 

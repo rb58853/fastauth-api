@@ -1,6 +1,7 @@
 from typing import Any
 from fastapi.routing import Match
 import os
+from ..client_db.client_db import load_access_token
 
 
 class Params:
@@ -9,7 +10,7 @@ class Params:
         self.path_params = self.get_path_params()
 
     def get_path_params(self) -> Any:
-        path_params:dict = {}
+        path_params: dict = {}
         routes = self.req.app.router.routes
         for route in routes:
             match, scope = route.matches(self.req)
@@ -24,5 +25,6 @@ class Params:
 def match_key(recived_key, key):
     return key == recived_key
 
+
 def get_key(client_id: str):
-    return "<client_token>"
+    return load_access_token(client_id=client_id)

@@ -15,7 +15,14 @@ classifiers = [
 ]
 license = "MIT"
 license-files = ["LICENSE*"]
-dependencies = ["fastapi", "websockets", "requests", "uvicorn"]
+dependencies = [
+  "fastapi",
+  "websockets",
+  "requests",
+  "jose",
+  "cryptography",
+  "uvicorn",
+]
 
 [project.urls]
 Homepage = "https://github.com/rb58853/fastauth-api"

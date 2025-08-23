@@ -7,6 +7,7 @@ fastauth.config.json
 
 # Development files
 xbuild.md
+src/api.py
 
 # Build files
 dist/*

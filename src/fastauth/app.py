@@ -1,8 +1,7 @@
 from fastapi import FastAPI, APIRouter
-from .routers.jsondb import router as jsondb_router
-from .middleware import AccessTokenMiddleware
+from .middleware import AccessTokenMiddleware, websocket_middleware
 from .openapi import FastauthOpenAPI
-from .routers import TokenRouter
+from .routers import TokenRouter, jsondb_router
 
 
 def set_auth(

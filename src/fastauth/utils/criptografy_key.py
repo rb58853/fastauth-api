@@ -1,5 +1,9 @@
 from cryptography.fernet import Fernet
-from envfile import write_key, key_in
+
+if __name__ == "__main__":
+    from envfile import write_key, key_in
+else:
+    from .envfile import write_key, key_in
 
 VAR_NAME = "CRIPTOGRAFY_KEY"
 
@@ -15,7 +19,7 @@ def generate_criptografy_key(add2env: bool = True):
             )
         else:
             keep = "y"
-            
+
         if keep == "y" or keep == "yes":
             write_key(key=key, name=VAR_NAME)
 
@@ -25,6 +29,7 @@ def generate_criptografy_key(add2env: bool = True):
         + "added to .env file"
     )
     return key
+
 
 if __name__ == "__main__":
     generate_criptografy_key()

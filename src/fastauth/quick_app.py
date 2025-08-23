@@ -1,5 +1,5 @@
 from fastapi import FastAPI, APIRouter
-from .middleware import AccessTokenMiddleware, websocket_middleware
+from .middleware import AccessTokenMiddleware
 from .openapi import FastauthOpenAPI
 from .routers import TokenRouter, jsondb_router
 

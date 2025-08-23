@@ -1,8 +1,8 @@
 from fastapi import FastAPI
-from http import HTTPStatus
-from pydantic import BaseModel
+from fastauth import set_auth
 
 app = FastAPI(root_path="/test-api")
+set_auth(app)
 
 
 @app.get(

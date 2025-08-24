@@ -5,6 +5,7 @@ from typing import Any, Dict
 from pydantic import BaseModel
 from fastapi import APIRouter, status
 from utils.standart_response import standard_response
+from http import HTTPStatus
 
 router = APIRouter(prefix="/data", tags=["data"])
 DB_FILE = "data/simple_db.json"
@@ -12,13 +13,16 @@ db_lock = Lock()
 
 
 class DataModel(BaseModel):
-    data: Dict[str, Any]
+    data: Dict[str, Any] | None
 
 
 def load_db() -> Dict[str, Any]:
     """Load the JSON database from file."""
+    dir_path = "/".join(DB_FILE.split("/")[:-1])
+    if not os.path.exists(dir_path):
+        os.makedirs(dir_path)
+
     if not os.path.exists(DB_FILE):
-        os.makedirs(DB_FILE)
         with open(DB_FILE, "w") as f:
             json.dump({}, f)
         return {}
@@ -33,7 +37,7 @@ def save_db(db: Dict[str, Any]) -> None:
         json.dump(db, f, indent=4)
 
 
-@router.get("/token", response_model=DataModel)
+@router.get("/token")
 async def get_data(client_id: str):
     """
     Retrieve data for a given client_id from the JSON database.
@@ -44,12 +48,13 @@ async def get_data(client_id: str):
             return standard_response(
                 status="error",
                 message="Client ID not found",
-                status_code=status.HTTP_404_NOT_FOUND,
+                code=HTTPStatus.NOT_FOUND,
+                details={"client_id": client_id},
             )
         return standard_response(
             status="success",
             message="Data retrieved successfully",
-            status_code=status.HTTP_200_OK,
+            code=HTTPStatus.OK,
             data={"client_id": db[client_id]},
         )
 
@@ -66,6 +71,6 @@ async def save_data(client_id: str, payload: DataModel):
     return standard_response(
         status="success",
         message="Data saved successfully",
-        status_code=status.HTTP_200_OK,
+        code=HTTPStatus.OK,
         data={"client_id": client_id} | payload.data,
     )

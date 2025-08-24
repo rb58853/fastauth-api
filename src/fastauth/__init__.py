@@ -3,12 +3,12 @@
 from .quick_app import set_auth
 from .routers.auth import TokenRouter
 from .openapi.openapi import FastauthOpenAPI
-from ...tests.database.jsondb import router as jsondb_router
+from .middleware import AccessTokenMiddleware
 
 
 __all__ = [
     "set_auth",
     "TokenRouter",
-    "jsondb_router",
+    "AccessTokenMiddleware",
     "FastauthOpenAPI",
 ]

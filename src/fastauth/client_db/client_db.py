@@ -2,7 +2,11 @@ import httpx
 from typing import Optional
 from ..config import logger, DatabaseConfig
 
-DATABASE_API_URL: str = DatabaseConfig.PATH | "http://localhost:6789/mydb/data"
+DATABASE_API_URL: str = (
+    DatabaseConfig.PATH
+    if DatabaseConfig.PATH is not None
+    else "http://localhost:6789/mydb/data"
+)
 
 
 def save_token(

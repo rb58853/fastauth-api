@@ -1,5 +1,5 @@
 from fastapi import HTTPException, WebSocket
-from .utils import Params, match_key, get_key
+from .utils import Params, match_key, get_access_token
 from functools import wraps
 
 
@@ -9,7 +9,7 @@ def websocket_middleware(func):
         params = Params(websocket)
         client_id = params.get_param("client_id")
         request_api_key = websocket.headers.get("API-KEY")
-        client_key = get_key(client_id)
+        client_key = get_access_token(client_id)
 
         if request_api_key is None or not match_key(request_api_key, client_key):
             await websocket.accept()

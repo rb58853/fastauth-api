@@ -32,5 +32,5 @@ def match_key(recived_key, key):
     return key == recived_key
 
 
-def get_key(client_id: str):
+def get_access_token(client_id: str):
     return load_access_token(client_id=client_id)

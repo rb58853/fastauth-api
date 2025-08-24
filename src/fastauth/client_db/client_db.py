@@ -46,8 +46,9 @@ def load_access_token(client_id: str) -> Optional[str]:
     try:
         response = httpx.get(url)
         if response.status_code == 200:
-            data = response.json()
-            return data.get("access_token")
+            data: dict = response.json()["data"]
+            access_token: str = data.get("access_token")
+            return access_token
     except httpx.RequestError as e:
         logger.warning(
             f"An error occurred while requesting {e.request.url!r} for get data. Error: {str(e)}"

@@ -3,7 +3,7 @@ from http import HTTPStatus
 from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.responses import Response, JSONResponse
 
-from .utils import Params, get_key
+from .utils import Params, get_access_token
 from ..config import logger, ConfigServer
 
 
@@ -38,7 +38,7 @@ class AccessTokenMiddleware(BaseHTTPMiddleware):
         if require_access_token(req):
             client_id: str | None = Params(req).get_param("client_id")
             access_token: str = req.headers.get("ACCESS-TOKEN")
-            required_token: str = get_key(client_id)
+            required_token: str = get_access_token(client_id)
 
             if required_token is None:
                 return JSONResponse(

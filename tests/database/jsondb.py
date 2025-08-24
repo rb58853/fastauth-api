@@ -55,7 +55,8 @@ async def get_data(client_id: str):
             status="success",
             message="Data retrieved successfully",
             code=HTTPStatus.OK,
-            data={"client_id": db[client_id]},
+            data=db[client_id],
+            details={"client_id": client_id},
         )
 
 

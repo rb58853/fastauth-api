@@ -4,10 +4,10 @@ from threading import Lock
 from typing import Any, Dict
 from pydantic import BaseModel
 from fastapi import APIRouter, status
-from ..models.responses.standart import standard_response
+from utils.standart_response import standard_response
 
-router = APIRouter(prefix="/my_db", tags=["data"])
-DB_FILE = "database/simple_db.json"
+router = APIRouter(prefix="/data", tags=["data"])
+DB_FILE = "data/simple_db.json"
 db_lock = Lock()
 
 
@@ -18,9 +18,11 @@ class DataModel(BaseModel):
 def load_db() -> Dict[str, Any]:
     """Load the JSON database from file."""
     if not os.path.exists(DB_FILE):
+        os.makedirs(DB_FILE)
         with open(DB_FILE, "w") as f:
             json.dump({}, f)
         return {}
+
     with open(DB_FILE, "r", encoding="utf-8") as f:
         return json.load(f)
 
@@ -31,8 +33,8 @@ def save_db(db: Dict[str, Any]) -> None:
         json.dump(db, f, indent=4)
 
 
-@router.get("/data/token", response_model=DataModel)
-def get_data(client_id: str):
+@router.get("/token", response_model=DataModel)
+async def get_data(client_id: str):
     """
     Retrieve data for a given client_id from the JSON database.
     """
@@ -48,12 +50,12 @@ def get_data(client_id: str):
             status="success",
             message="Data retrieved successfully",
             status_code=status.HTTP_200_OK,
-            data={"data": db[client_id]},
+            data={"client_id": db[client_id]},
         )
 
 
-@router.post("/data/token", response_model=DataModel)
-def save_data(client_id: str, payload: DataModel):
+@router.post("/token", response_model=DataModel)
+async def save_data(client_id: str, payload: DataModel):
     """
     Save or update data for a given client_id in the JSON database.
     """
@@ -65,5 +67,5 @@ def save_data(client_id: str, payload: DataModel):
         status="success",
         message="Data saved successfully",
         status_code=status.HTTP_200_OK,
-        data=payload.data,
+        data={"client_id": client_id} | payload.data,
     )

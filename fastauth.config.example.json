@@ -1,6 +1,6 @@
 {
     "app-name": "fastauth",
-    "database-api-url": "http://127.0.0.1:8000/my_db/data",
+    "database-api-path": "http://127.0.0.1:6789/mydb/data",
     "master-token": "<your-master-token>",
     "crypto-key": "<your-32-byte-crypto-key>",
     "master-token-paths": [

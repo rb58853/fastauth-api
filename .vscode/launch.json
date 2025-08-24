@@ -25,6 +25,20 @@
                 "--reload"
             ],
             "jinja": true
+        },
+        {
+            "name": "Jsondb: Test",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "uvicorn",
+            "cwd": "${workspaceFolder}/tests/database",
+            "args": [
+                "api:app",
+                "--port",
+                "6789",
+                "--reload"
+            ],
+            "jinja": true
         }
     ]
 }

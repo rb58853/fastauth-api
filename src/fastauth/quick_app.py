@@ -1,15 +1,12 @@
 from fastapi import FastAPI, APIRouter
 from .middleware import AccessTokenMiddleware
 from .openapi import FastauthOpenAPI
-from .routers import TokenRouter, jsondb_router
+from .routers import TokenRouter
 
 
 def set_auth(
     fastapp: FastAPI,
-    routers: list[APIRouter] = [
-        TokenRouter().route,
-        jsondb_router,
-    ],
+    routers: list[APIRouter] = [TokenRouter().route],
 ) -> None:
     """
     Genera middleware, token routes y openapi automaticamente con los valores default.

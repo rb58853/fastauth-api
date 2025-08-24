@@ -36,3 +36,11 @@ class TokenConfig:
     CRIPTOGRAFY_KEY: str = os.getenv("CRYPTOGRAFY_KEY", None) or config.get(
         "crypto-key", None
     )
+
+
+class DatabaseConfig:
+    PATH: str | None = (
+        config.get("database-api-path", None)
+        if config.get("database-api-path", None) is not None
+        else None
+    )

@@ -40,6 +40,18 @@ class AccessTokenMiddleware(BaseHTTPMiddleware):
             access_token: str = req.headers.get("ACCESS-TOKEN")
             required_token: str = get_key(client_id)
 
+            if required_token is None:
+                return JSONResponse(
+                    content={"detail": "Invalid Client ID"},
+                    status_code=HTTPStatus.UNAUTHORIZED,
+                )
+
+            if access_token is None or required_token != access_token:
+                return JSONResponse(
+                    content={"detail": "Unauthorized Access Token"},
+                    status_code=HTTPStatus.UNAUTHORIZED,
+                )
+
         return None
 
 

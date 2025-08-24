@@ -17,7 +17,7 @@ Debes crear un archivo llamado `fastauth.config.json` en la direccion raiz del p
 ```json
 {
     "app-name": "fastauth",
-    "database-api-url": "http://127.0.0.1:8000/my_db/data",
+    "database-api-url": "http://127.0.0.1:8000/mydb/data",
     "master-token": "<your-master-token>",
     "crypto-key": "<your-32-byte-crypto-key>",
     "master-token-paths": [

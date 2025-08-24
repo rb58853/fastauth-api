@@ -1,8 +1,8 @@
 import httpx
 from typing import Optional
+from ..config import logger, DatabaseConfig
 
-
-DATABASE_API_URL: str = "http://localhost:8000/data"
+DATABASE_API_URL: str = DatabaseConfig.PATH | "http://localhost:6789/mydb/data"
 
 
 def save_token(
@@ -21,7 +21,7 @@ def save_token(
     Returns:
         bool: True if the tokens were saved successfully, False otherwise.
     """
-    url = f"{DATABASE_API_URL}/token/save?client_id={client_id}"
+    url = f"{DATABASE_API_URL}/token?client_id={client_id}"
     payload = {"access_token": access_token, "refresh_token": refresh_token}
 
     response = httpx.post(url, json=payload)
@@ -38,11 +38,16 @@ def load_access_token(client_id: str) -> Optional[str]:
     Returns:
         Optional[str]: The access token if found, None otherwise.
     """
-    url = f"{DATABASE_API_URL}/token/load?client_id={client_id}"
-    response = httpx.get(url)
-    if response.status_code == 200:
-        data = response.json()
-        return data.get("access_token")
+    url = f"{DATABASE_API_URL}/token?client_id={client_id}"
+    try:
+        response = httpx.get(url)
+        if response.status_code == 200:
+            data = response.json()
+            return data.get("access_token")
+    except httpx.RequestError as e:
+        logger.warning(
+            f"An error occurred while requesting {e.request.url!r} for get data. Error: {str(e)}"
+        )
     return None
 
 
@@ -56,7 +61,7 @@ def load_refresh_token(client_id: str) -> Optional[str]:
     Returns:
         Optional[str]: The refresh token if found, None otherwise.
     """
-    url = f"{DATABASE_API_URL}/token/load?client_id={client_id}"
+    url = f"{DATABASE_API_URL}/token?client_id={client_id}"
     response = httpx.get(url)
     if response.status_code == 200:
         data = response.json()

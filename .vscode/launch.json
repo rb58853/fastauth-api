@@ -9,8 +9,9 @@
             "type": "debugpy",
             "request": "launch",
             "module": "uvicorn",
+            "cwd": "${workspaceFolder}/examples/apps/basic_api",
             "args": [
-                "tests.api.api:app",
+                "api:app",
                 "--reload"
             ],
             "jinja": true
@@ -31,7 +32,7 @@
             "type": "debugpy",
             "request": "launch",
             "module": "uvicorn",
-            "cwd": "${workspaceFolder}/tests/database",
+            "cwd": "${workspaceFolder}/examples/databases/json_database",
             "args": [
                 "api:app",
                 "--port",

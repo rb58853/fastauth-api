@@ -1,0 +1,12 @@
+{
+    "app-name": "fastauth-api",
+    "database-api-path": "http://127.0.0.1:6789/mydb/data",
+    "master-token": "kAONxbkATfyk3kmnUhw7YyAMotmvuJ6tVsuT1w3A6N4=",
+    "crypto-key": "kAONxbkATfyk3kmnUhw7YyAMotmvuJ6tVsuT1w3A6N4=",
+    "master-token-paths": [
+        "/master"
+    ],
+    "access-token-paths": [
+        "/access"
+    ]
+}

@@ -1,5 +1,5 @@
 # Secret files
-fastauth.config.json
+/fastauth.config.json
 .env
 
 # Python cache files
@@ -14,4 +14,4 @@ dist/*
 src/fastauth_api.egg-info/*
 
 # Database Files
-tests/database/data/*
+examples/databases/json_database/data/*

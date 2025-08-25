@@ -103,7 +103,8 @@ class TokenRouter:
                 message="Token generated",
                 code=HTTPStatus.OK,
                 data={
-                    "access-token": access_token,
+                    "client_id": client_id
+                    "access_token": access_token,
                     "refresh_token": refresh_token,
                 }
             }
@@ -123,7 +124,8 @@ class TokenRouter:
                 message="Token generated",
                 code=HTTPStatus.OK,
                 data={
-                    "access-token": access_token,
+                    "client_id": client_id
+                    "access_token": access_token,
                     "refresh_token": refresh_token,
                 }
             }
@@ -229,7 +231,7 @@ class BaseTokenGeneration:
             code=HTTPStatus.OK,
             data={
                 "client_id": client_id,
-                "access-token": access_token,
+                "access_token": access_token,
                 "refresh_token": refresh_token,
             },
         )

@@ -39,7 +39,20 @@ class AccessTokenMiddleware(BaseHTTPMiddleware):
         if require_access_token(req):
             # client_id: str | None = Params(req).get_param("client_id")
             access_token: str = req.headers.get("ACCESS-TOKEN")
-            payload = TokenCriptografy.decode(access_token)
+            if access_token is None:
+                return JSONResponse(
+                    content={"detail": "Invalid Access Token. Access Token is null"},
+                    status_code=HTTPStatus.UNAUTHORIZED,
+                )
+            payload: dict = {}
+            try:
+                payload = TokenCriptografy.decode(access_token)
+            except Exception as e:
+                return JSONResponse(
+                    content={"detail": f"Invalid Access Token. Error: {e}"},
+                    status_code=HTTPStatus.UNAUTHORIZED,
+                )
+
             client_id: str | None = payload.get("client_id")
             required_token: str = get_access_token(client_id)
 
@@ -54,7 +67,7 @@ class AccessTokenMiddleware(BaseHTTPMiddleware):
                     status_code=HTTPStatus.UNAUTHORIZED,
                 )
 
-            if access_token is None or required_token != access_token:
+            if required_token != access_token:
                 return JSONResponse(
                     content={"detail": "Unauthorized Access Token"},
                     status_code=HTTPStatus.UNAUTHORIZED,

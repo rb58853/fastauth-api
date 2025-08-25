@@ -15,21 +15,33 @@
 
 </div>
 
-Fastauth es un middleware personalizado para usarse con tokens autogenerados, con sistema de generacion de tokens y de refresh tokens. El objetivo es facilitar el desarrollo de middlewares ajustables a cualquier proyecto de python en `Fastapi`.
+Fastauth-api es un middleware de autenticación diseñado para integrarse con aplicaciones `FastAPI`. Proporciona generación y manejo de tokens de acceso y refresh, así como utilidades para cifrado y gestión segura de claves. Está pensado para facilitar la implementación de políticas de autenticación basadas en tokens y su almacenamiento en un backend genérico expuesto por una API REST.
 
-## Instalacion
+Resumen de características principales:
 
-```shell
+- Generación de Access Tokens y Refresh Tokens.
+- Integración con una API externa para persistencia de tokens.
+- Soporte para una "master token" que habilita operaciones privilegiadas.
+- Utilidades para generar y almacenar claves de cifrado seguras.
+- Middleware configurable para proteger rutas por niveles (master / access).
+
+## Instalación
+
+Instale desde PyPI:
+
+```bash
 pip install fasauth-api
 ```
 
-## Requisitos
+<!-- ## Requisitos y consideraciones
 
-- Usar la ruta de endpoint especifica para guardar y cargar tokens de acceso y actualización desde una base de datos
+- Definir un endpoint (API) donde se guarden y recuperen tokens persistidos. La URL de esa API se especifica en la configuración.
+- Decidir si usará una "master token" para operaciones administrativas (recomendado para emisión inicial de tokens).
+- Proveer una clave de cifrado (32 bytes) para proteger payloads y tokens en reposo. -->
 
-## Config File
+## Archivo de configuración
 
-Debes crear un archivo llamado `fastauth.config.json` en la direccion raiz del proyecto. Luego llenarlo con los siguientes datos:
+Cree en la raíz del proyecto un archivo llamado `fastauth.config.json` con la estructura mínima:
 
 ```json
 {
@@ -38,44 +50,51 @@ Debes crear un archivo llamado `fastauth.config.json` en la direccion raiz del p
     "master-token": "<your-master-token>",
     "criptografy-key": "<your-32-byte-criptografy-key>",
     "master-token-paths": [
-        "list of your root endpoints that need master token for use",
-        "...",
-        "..."
+        "/master/*"
     ],
     "access-token-paths": [
-        "list of your root endpoints that need access token for use",
-        "...",
-        "..."
+        "/access/*"
     ]
 }
 ```
 
-[ver config.example](fastauth.config.example.json)
+En esta configuración:
 
-### Details
+- `app-name`: nombre identificador de la aplicación.
+- `database-api-url`: endpoint de la API encargada de persistir tokens.
+- `master-token`: (opcional) token con privilegios para operaciones administrativas.
+- `criptografy-key`: (opcional) clave usada para cifrar/decrifrar payloads.
+- `master-token-paths` y `access-token-paths`: patrones de rutas que exigen validación por tipo de token.
 
-- `"master-token"` es un campo opcional, en caso de no tenerlo en esta configuracion, entonces es obligado tener una variable llamada `MASTER_TOKEN` en el archivo de entorno `.env`.
-- `"criptografy-key"` es un campo opcional, en caso de no tenerlo en esta configuracion, entonces es obligado tener una variable llamada `CRIPTOGRAFY_KEY` en el archivo de entorno `.env`.
+Si no incluye `master-token` o `criptografy-key` en el archivo, puede definirlas mediante variables de entorno (ver siguiente sección).
 
-```.env
+Consulte el archivo de ejemplo: [`fastauth.config.example.json`](./fastauth.config.example.json)
+
+### Variables de entorno (alternativa)
+
+Puede definir las claves sensibles en su `.env`:
+
+```
 CRIPTOGRAFY_KEY=kAON......................A6N4=
 MASTER_TOKEN=kAON......................A6N4=
 ```
 
-## Tokens Genaration utils
+Cuando ambas fuentes (archivo config y variables de entorno) estén disponibles, se prioriza el valor del archivo de configuración.
 
-### Criptografy key
+## Generación de claves y tokens (utilidades)
+
+Fastauth incluye utilidades para generar claves seguras y escribir variables al entorno:
+
+- Generar una CRIPTOGRAFY_KEY:
 
 ```python
-# CRIPTOGRAFY_KEY auto generation
 from fastauth.utils import generate_criptografy_key
 generate_criptografy_key()
 ```
 
-### Master Token
+- Generar y escribir una MASTER_TOKEN en el archivo de entorno:
 
 ```python
-# Master Token auto generation
 from cryptography.fernet import Fernet
 from fastauth.utils import writekey2env
 
@@ -83,7 +102,11 @@ key = Fernet.generate_key().decode()
 writekey2env(key=key, name="MASTER_TOKEN")
 ```
 
-## Usage example
+Estas utilidades permiten crear claves seguras compatibles con el sistema interno de cifrado.
+
+## Uso básico (integración con FastAPI)
+
+Ejemplo de integración mínima:
 
 ```python
 from fastapi import FastAPI
@@ -92,37 +115,171 @@ from fastauth import set_auth
 app = FastAPI(root_path="/test-api")
 set_auth(app)
 
-
-@app.get(
-    "/health",
-)
+@app.get("/health")
 async def health_check():
-    return {"status": "healthy"}
+        return {"status": "healthy"}
 
-
-@app.get(
-    "/access/health",
-)
+@app.get("/access/health")
 async def access_health_check():
-    return {
-        "service": "access health that need access token",
-        "status": "healthy",
-    }
+        return {"service": "access health that need access token", "status": "healthy"}
 
-
-@app.get(
-    "/master/health",
-)
-async def access_health_check():
-    return {
-        "service": "master health that need master token",
-        "status": "healthy",
-    }
+@app.get("/master/health")
+async def master_health_check():
+        return {"service": "master health that need master token", "status": "healthy"}
 ```
 
-## TODO
+`set_auth(app)` aplica el middleware y los routers necesarios para la emisión y verificación de tokens según la configuración.
 
-- Migracion de base de datos al cambiar criptografy key
-- Mejorar la compatibilidad con cualquier payload que se encripte
-- Escalar la estructura del codigo del websocket decorator
-- Documentar detalladamente el codigo y los endpoints para el swagguer
+[ver mas ejemplos](./examples/EXAMPLES.md)
+
+## Uso del endpoint /auth/token
+
+El endpoint de tokens es el mecanismo central para emitir y, opcionalmente, persistir tokens. A continuación se describe su propósito, comportamiento esperado y ejemplos de uso. Para la implementación concreta, puede consultar el archivo de código en: `./src/fastauth/routers/auth.py`.
+
+Propósito
+
+- Emitir pares de tokens (access token + refresh token) para un sujeto (usuario, servicio o entidad).
+- Almacenar metadatos asociados al token (según la API de base de datos configurada).
+- Sugerir flujos para refrescar tokens y revocarlos.
+
+Autenticación requerida
+
+- Emisión inicial: en escenarios administrativos la emisión puede requerir la MASTER_TOKEN. Esto se transmite normalmente a través del encabezado:
+  - Authorization: Bearer <MASTER_TOKEN>
+  - o mediante un encabezado personalizado, por ejemplo X-Master-Token.
+- Uso normal (refresh / introspección): operaciones con refresh tokens usan el refresh token en el cuerpo de la petición o en Authorization según el diseño.
+
+Métodos y rutas (convenciones)
+
+- POST /auth/token — emitir un nuevo par (access + refresh) o persistir/registrar un token.
+- POST /auth/refresh — intercambiar un refresh token por un nuevo access token (y opcionalmente nuevo refresh token).
+- POST /auth/revoke — revocar un token (access o refresh), marcándolo en la capa de persistencia.
+
+Request (ejemplos indicativos)
+
+- Emisión por master token (administrativo):
+
+Headers:
+
+```
+Authorization: Bearer <MASTER_TOKEN>
+Content-Type: application/json
+```
+
+Body:
+
+```json
+{
+    "sub": "user:1234",
+    "scopes": ["read", "write"],
+    "expires_in": 3600,
+    "meta": {
+        "ip": "198.51.100.1",
+        "device": "web"
+    }
+}
+```
+
+- Refresh (cliente con refresh token):
+
+Headers:
+
+```
+Content-Type: application/json
+```
+
+Body:
+
+```json
+{
+    "refresh_token": "<existing-refresh-token>"
+}
+```
+
+Responses (estructura típica)
+
+- Éxito emisión (HTTP 201 o 200):
+
+```json
+{
+    "access_token": "<jwt-or-encrypted-token>",
+    "token_type": "bearer",
+    "expires_in": 3600,
+    "refresh_token": "<refresh-token>",
+    "issued_at": "2025-08-25T12:00:00Z",
+    "meta": {
+        "sub": "user:1234",
+        "scopes": ["read", "write"]
+    }
+}
+```
+
+- Éxito refresh:
+
+```json
+{
+    "access_token": "<new-access-token>",
+    "expires_in": 3600,
+    "refresh_token": "<new-or-same-refresh-token>"
+}
+```
+
+- Error (ejemplo):
+
+HTTP 401 / 400 con payload:
+
+```json
+{
+    "detail": "Master token inválido o expirado"
+}
+```
+
+Persistencia
+
+- Cuando la configuración incluye `database-api-url`, el router intentará registrar tokens y metadatos en ese endpoint. La estructura y contract de la API remota depende de la implementación de backend; Fastauth espera un endpoint REST que acepte POST/GET/DELETE para gestionar tokens.
+
+Buenas prácticas de uso
+
+- Mantener la CRIPTOGRAFY_KEY fuera del control de versiones y solo en entornos seguros.
+- Limitar la difusión de MASTER_TOKEN: usarlo únicamente para operaciones administrativas centralizadas.
+- Configurar expiraciones sensatas para access tokens y refresh tokens.
+- Implementar revocación en la capa de persistencia para invalidar tokens comprometidos.
+- Proteger la ruta de la API de persistencia mediante autenticación y listado blanco de IPs si es posible.
+
+Ejemplos prácticos (cURL)
+
+- Solicitar token (emisión con master token):
+
+```bash
+curl -X POST "https://api.example.com/auth/token" \
+    -H "Authorization: Bearer <MASTER_TOKEN>" \
+    -H "Content-Type: application/json" \
+    -d '{"sub":"user:1234", "scopes":["read"], "expires_in":3600}'
+```
+
+- Refrescar token:
+
+```bash
+curl -X POST "https://api.example.com/auth/refresh" \
+    -H "Content-Type: application/json" \
+    -d '{"refresh_token":"<refresh-token>"}'
+```
+
+Seguridad y consideraciones finales
+
+- Los tokens deben transmitirse siempre por HTTPS.
+- Guardar refresh tokens en almacenamiento seguro (por ejemplo, cookies HttpOnly en navegadores o almacenamiento cifrado en clientes).
+- Rotación periódica de CRIPTOGRAFY_KEY puede requerir migración de tokens almacenados; el README incluye este ítem como TODO.
+
+## TODO / Roadmap
+
+- Implementar migración segura de la base de datos al rotar la CRIPTOGRAFY_KEY.
+- Ampliar compatibilidad con distintos formatos de payloads cifrados.
+- Reestructurar y escalar la implementación del decorador para websockets.
+- Documentar exhaustivamente cada endpoint para que esté disponible en Swagger/OpenAPI.
+
+## Licencia
+
+Proyecto bajo licencia MIT. Consulte el archivo LICENSE para detalles.
+
+Si necesita ejemplos específicos de payloads o adaptar los endpoints a su API de persistencia, proporcione la especificación de esa API y se entregarán ejemplos concretos de integración.

@@ -5,6 +5,7 @@ from starlette.responses import Response, JSONResponse
 
 from .utils import Params, get_access_token
 from ..config import logger, ConfigServer
+from ..utils import TokenCriptografy
 
 
 class AccessTokenMiddleware(BaseHTTPMiddleware):
@@ -23,10 +24,10 @@ class AccessTokenMiddleware(BaseHTTPMiddleware):
 
     def __check_master(self, req: Request) -> Response | None:
         if require_master_token(req):
-            access_token: str = req.headers.get("MASTER-TOKEN")
+            master_token: str = req.headers.get("MASTER-TOKEN")
             required_token: str = ConfigServer.MASTER_TOKEN
 
-            if access_token != required_token or access_token is None:
+            if master_token != required_token or master_token is None:
                 return JSONResponse(
                     content={"detail": "Unauthorized Master Token"},
                     status_code=HTTPStatus.UNAUTHORIZED,
@@ -36,13 +37,20 @@ class AccessTokenMiddleware(BaseHTTPMiddleware):
 
     def __check_access(self, req: Request) -> Response | None:
         if require_access_token(req):
-            client_id: str | None = Params(req).get_param("client_id")
+            # client_id: str | None = Params(req).get_param("client_id")
             access_token: str = req.headers.get("ACCESS-TOKEN")
+            payload = TokenCriptografy.decode(access_token)
+            client_id: str | None = payload.get("client_id")
             required_token: str = get_access_token(client_id)
 
             if required_token is None:
                 return JSONResponse(
                     content={"detail": "Invalid Client ID"},
+                    status_code=HTTPStatus.UNAUTHORIZED,
+                )
+            if client_id is None:
+                return JSONResponse(
+                    content={"detail": "Invalid Access Token"},
                     status_code=HTTPStatus.UNAUTHORIZED,
                 )
 

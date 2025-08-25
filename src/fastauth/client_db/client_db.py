@@ -25,10 +25,10 @@ def save_token(
     Returns:
         bool: True if the tokens were saved successfully, False otherwise.
     """
-    url = f"{DATABASE_API_URL}/token?client_id={client_id}"
-    payload = {"access_token": access_token, "refresh_token": refresh_token}
-
-    response = httpx.post(url, json=payload)
+    url: str = f"{DATABASE_API_URL}/token?client_id={client_id}"
+    payload: dict = {"access_token": access_token, "refresh_token": refresh_token}
+    data: dict = {"data": payload}
+    response = httpx.post(url, json=data)
     return response.status_code == 200
 
 

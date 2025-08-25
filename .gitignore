@@ -12,3 +12,6 @@ src/api.py
 # Build files
 dist/*
 src/fastauth_api.egg-info/*
+
+# Database Files
+tests/database/data/*

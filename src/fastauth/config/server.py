@@ -28,7 +28,7 @@ class ConfigServer:
         else os.getenv("MASTER_TOKEN", None)
     )
 
-    MASTER_PATHS: list[str] = ["/token/access"] + config.get("master-token-paths", [])
+    MASTER_PATHS: list[str] = ["/auth/token/new"] + config.get("master-token-paths", [])
     ACCESS_TOKEN_PATHS: list[str] = config.get("access-token-paths", [])
 
 

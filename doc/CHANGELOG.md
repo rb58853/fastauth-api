@@ -1,6 +1,10 @@
 # Changelog
 
-## version 0.0.1 (Start Project)
+## version 0.0.2 ⚙️
+
+- **🔌Master Token WebSocket integration**: Master token integration for using the WebSocket decorator. You can now choose between access or master token. [see example](../examples/apps/websocket_api/api.py)
+
+## version 0.0.1 (Start Project) 🌟
 
 - **🔐 Token-based authentication system (Access + Refresh) with endpoints ready:** check the `/auth` router and the `/token/new` and `/token/refresh` endpoints in [auth.py](src/fastauth/routers/auth.py).
 - **⚙️ Easy integration with `FastAPI`:** function [`set_auth(app)`](src/fastauth/quick_app.py) applies middleware, registers routes and replaces the OpenAPI with FastauthOpenAPI.

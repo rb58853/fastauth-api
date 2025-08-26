@@ -264,7 +264,7 @@ The package exposes a router with two public endpoints for generating and renewi
   - Read/write variables in `.env` using `writekey2env(...)`.
 - 🧠 JWT tokens signed with HS256 and payloads containing `client_id`, `type`, `iat`, `exp`.
 - **💾 Decoupled token persistence:** `save_token` / `load_access_token` interact with an external API configurable via `"database-api-path"` in the configuration file.
-- **🔌 WebSocket support:** authentication decorator for websockets (checks ACCESS-TOKEN in headers).
+- **🔌 WebSocket support:** authentication decorator for websockets (checks ACCESS-TOKEN or MASTER-TOKEN in headers).
 - **🧰 Extensible:** `TokenRouter` can be extended to customize token generation/renewal; middleware and OpenAPI are easily replaceable/adjustable.
 
 [see full version history](./doc/CHANGELOG.md)

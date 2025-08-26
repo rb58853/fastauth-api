@@ -12,6 +12,38 @@ class TokenType(Enum):
 
 
 def websocket_middleware(token_type: TokenType = TokenType.ACCESS):
+    """
+    Decorator factory that enforces token-based authentication for FastAPI WebSocket endpoints.
+    This decorator inspects incoming WebSocket headers and performs one of two checks before
+    allowing the wrapped handler to run:
+    - `TokenType.ACCESS` (default): expects header "ACCESS-TOKEN", decodes it, verifies the client_id
+        and compares the token against the stored access key. On failure it calls the connection
+        disconnect helper and prevents the handler from executing.
+    - `TokenType.MASTER`: expects header "MASTER-TOKEN" and compares it to ConfigServer.MASTER_TOKEN.
+        On mismatch it disconnects the client and prevents handler execution.
+
+    ### Parameters
+    `token_type`: `TokenType`
+            Token type required for the endpoint (`TokenType.ACCESS` or `TokenType.MASTER`). Defaults to
+            `TokenType.ACCESS`.
+    ---
+    ### Example
+    ```python
+    # file:api.py
+    @app.websocket("/ws/master")
+    @websocket_middleware(token_type=TokenType.MASTER)
+    async def websocket_chat(websocket: WebSocket):
+        await websocket.accept()
+        await websocket.send_json({"status": "success","detail": "Connected: Connection Accepted"})
+        ...
+    ```
+    ---
+    ### Notes
+    - Intended for use with FastAPI WebSocket routes.
+    - Keep the wrapped function signature compatible with a FastAPI WebSocket handler
+        (first parameter should be a WebSocket).
+    """
+
     def decorator(func):
         @wraps(func)
         async def wrapper(websocket: WebSocket, *args, **kwargs):

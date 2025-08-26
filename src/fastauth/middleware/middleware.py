@@ -9,6 +9,54 @@ from ..utils import TokenCriptografy
 
 
 class AccessTokenMiddleware(BaseHTTPMiddleware):
+    """
+    AccessTokenMiddleware: ASGI middleware for validating master and access tokens.
+
+    This middleware intercepts incoming HTTP requests and enforces two layered
+    authorization checks when applicable:
+
+    ### 1. Master token check
+        - Trigger: require_master_token(request) returns True.
+        - Expected header: "MASTER-TOKEN".
+        - Validation: header value is compared to ConfigServer.MASTER_TOKEN.
+        - Failure: returns a JSONResponse with HTTP 401 and detail "Unauthorized Master Token".
+
+    ### 2. Access token check
+        - Trigger: require_access_token(request) returns True.
+        - Expected header: "ACCESS-TOKEN".
+        - Validation flow:
+             a. If the header is missing, returns HTTP 401 with detail
+                 "Invalid Access Token. Access Token is null".
+             b. The token is decoded via TokenCriptografy.decode(access_token). Any
+                 decoding error is caught and returned as HTTP 401 with the error text.
+             c. The decoded payload must contain "client_id". If missing, returns
+                 HTTP 401 with detail "Invalid Access Token".
+             d. The middleware retrieves the canonical token for the client via
+                 get_access_token(client_id). If that returns None, returns HTTP 401
+                 with detail "Invalid Client ID".
+             e. If the canonical token does not exactly match the provided access
+                 token, returns HTTP 401 with detail "Unauthorized Access Token".
+
+    ### Behavior
+    - If neither check applies or both checks pass, the request is forwarded to
+      the downstream handler by awaiting call_next(request).
+    - The middleware logs incoming request paths (via logger.info).
+    - Token decoding exceptions are handled and converted to HTTP 401 responses;
+      they do not propagate.
+
+    ### Interface
+    - dispatch(self, request: Request, call_next) -> Response
+      - request: Starlette/FastAPI Request instance.
+      - call_next: callable that receives the request and returns a Response (awaitable).
+      - Returns: a Response instance. On authorization failure, returns a JSONResponse
+         with status code 401 and a JSON body containing a "detail" message.
+
+    ### Notes and considerations
+    - This middleware is asynchronous and intended for ASGI apps (e.g., FastAPI).
+    - Header names are expected exactly as "MASTER-TOKEN" and "ACCESS-TOKEN".
+    - Comparisons are strict equality checks; ensure token formats match exactly.
+    """
+
     async def dispatch(self, req: Request, call_next) -> Response:
         logger.info(f"Request Path: {req.url.path}")
 

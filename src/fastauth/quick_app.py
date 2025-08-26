@@ -9,7 +9,15 @@ def set_auth(
     routers: list[APIRouter] = [TokenRouter().route],
 ) -> None:
     """
-    Genera middleware, token routes y openapi automaticamente con los valores default.
+    Configure authentication for a FastAPI application.
+    Adds AccessTokenMiddleware, installs FastauthOpenAPI, and includes the given routers.
+
+    Args:
+        fastapp : FastAPI
+            The FastAPI application to configure.
+        routers : list[APIRouter], optional
+            Routers to include (default: TokenRouter().route).
+    
     """
     fastapp.add_middleware(AccessTokenMiddleware)
     openapi: FastauthOpenAPI = FastauthOpenAPI(app=fastapp)

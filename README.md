@@ -32,7 +32,7 @@ Summary of main features:
 Install from PyPI:
 
 ```bash
-pip install fasauth-api
+pip install fastauth-api
 ```
 
 ## Configuration file

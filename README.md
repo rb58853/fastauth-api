@@ -10,16 +10,32 @@
 [![Commit activity](https://img.shields.io/github/commit-activity/m/rb58853/fastauth-api)](https://github.com/rb58853/fastauth-api/commits)
 [![Last commit](https://img.shields.io/github/last-commit/rb58853/fastauth-api.svg?style=flat)](https://github.com/rb58853/fastauth-api/commits)
 [![MSeeP](https://img.shields.io/badge/Fastapi-Middelware-009688)](https://fastapi.tiangolo.com/tutorial/middleware/)
-
-
-<!-- [![Watchers](https://img.shields.io/github/watchers/rb58853/fastauth-api?style=flat&logo=github)](https://github.com/rb58853/fastauth-api) -->
 <!-- [![PyPI Downloads](https://static.pepy.tech/badge/fastauth-api)](https://pepy.tech/projects/fastauth-api) -->
 
 </div>
 
 Fastauth-api is an authentication middleware designed to integrate with `FastAPI` applications. It provides generation and management of access and refresh tokens, as well as utilities for encryption and secure key management. It is intended to simplify implementing token-based authentication policies and storing tokens in a generic backend exposed via a REST API.
 
-Summary of main features:
+## Table of Contents
+
+- [Summary of main features](#summary-of-main-features)
+- [Installation](#installation)
+- [Configuration file](#configuration-file)
+  - [Environment variables (alternative)](#environment-variables-alternative)
+- [Key and token generation (utilities)](#key-and-token-generation-utilities)
+- [Basic usage (FastAPI integration)](#basic-usage-fastapi-integration)
+- [Using the /auth/token router](#using-the-authtoken-router)
+  - [Main endpoints](#main-endpoints)
+  - [Configuration requirements](#configuration-requirements)
+  - [Relevant technical details](#relevant-technical-details)
+  - [Usage examples](#usage-examples)
+  - [Customization](#customization)
+  - [Errors and representative messages](#errors-and-representative-messages)
+- [TODO / Roadmap](#todo--roadmap)
+- [Version status](#version-status)
+- [License](#license)
+
+## Summary of main features
 
 - Generation of Access Tokens and Refresh Tokens.
 - Integration with an external API for token persistence.

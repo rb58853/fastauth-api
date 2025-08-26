@@ -146,7 +146,7 @@ class BaseTokenGeneration:
             )
             return standard_response(
                 status="error",
-                message="Crypto key not set",
+                message="CRYPTOGRAFY_KEY is not set",
                 code=HTTPStatus.INTERNAL_SERVER_ERROR,
             )
 
@@ -180,7 +180,7 @@ class BaseTokenGeneration:
             )
             return standard_response(
                 status="error",
-                message="Crypto key not set",
+                message="CRYPTOGRAFY_KEY is not set",
                 code=HTTPStatus.INTERNAL_SERVER_ERROR,
             )
 

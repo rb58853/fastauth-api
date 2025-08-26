@@ -1,6 +1,6 @@
 from functools import wraps
 from fastapi import HTTPException, WebSocket
-from proto import Enum
+from enum import Enum
 from .utils import Params, match_key, get_access_token
 from ..utils import TokenCriptografy
 from ..config import logger, ConfigServer
@@ -35,7 +35,8 @@ def websocket_middleware(token_type: TokenType = TokenType.ACCESS):
 
                 if token is None or master_token != token:
                     await disconnect(
-                        websocket=websocket, detail="Unauthorized Master Token"
+                        websocket=websocket,
+                        detail="Disconnected: Unauthorized Master Token",
                     )
                     disconnected = True
 
@@ -47,8 +48,10 @@ def websocket_middleware(token_type: TokenType = TokenType.ACCESS):
     return decorator
 
 
-async def disconnect(websocket: WebSocket, detail: str = "Unauthrized ACCESS-TOKEN"):
+async def disconnect(
+    websocket: WebSocket, detail: str = "Disconnected: Unauthrized ACCESS-TOKEN"
+):
     await websocket.accept()
-    await websocket.send_json({"status": "disconnected", "detail": detail})
+    await websocket.send_json({"status": "error", "detail": detail})
     await websocket.close(code=1008)
     raise HTTPException(status_code=401, detail=detail)

@@ -139,7 +139,7 @@ class BaseTokenGeneration:
         return BaseTokenGeneration.__generate_tokens_from_client(client_id=client_id)
 
     def refresh_access_token(refresh_token: str) -> dict:
-        CRYPTOGRAFY_KEY = TokenConfig.CRIPTOGRAFY_KEY
+        CRYPTOGRAFY_KEY = TokenConfig.CRYPTOGRAPHY_KEY
         if not CRYPTOGRAFY_KEY:
             logger.error(
                 "CRYPTOGRAFY_KEY is not set. Please set it in the environment or config file."
@@ -173,7 +173,7 @@ class BaseTokenGeneration:
 
     def __generate_tokens_from_client(client_id: str | None) -> dict:
         # Secret key for encoding the JWTs (should be kept secure in production)
-        CRYPTOGRAFY_KEY = TokenConfig.CRIPTOGRAFY_KEY
+        CRYPTOGRAFY_KEY = TokenConfig.CRYPTOGRAPHY_KEY
         if not CRYPTOGRAFY_KEY:
             logger.error(
                 "CRYPTOGRAFY_KEY is not set. Please set it in the environment or config file."

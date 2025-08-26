@@ -19,7 +19,7 @@ dependencies = [
   "fastapi",
   "websockets",
   "requests",
-  "jose",
+  "python-jose[cryptography]",
   "cryptography",
   "uvicorn",
 ]

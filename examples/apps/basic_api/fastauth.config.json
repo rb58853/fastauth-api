@@ -3,6 +3,7 @@
     "database-api-path": "http://127.0.0.1:6789/mydb/data",
     "master-token": "kAONxbkATfyk3kmnUhw7YyAMotmvuJ6tVsuT1w3A6N4=",
     "crypto-key": "kAONxbkATfyk3kmnUhw7YyAMotmvuJ6tVsuT1w3A6N4=",
+    "headers": {},
     "master-token-paths": [
         "/master"
     ],

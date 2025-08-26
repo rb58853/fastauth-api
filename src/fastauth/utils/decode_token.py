@@ -6,7 +6,7 @@ ALGORITHM = "HS256"
 
 class TokenCriptografy:
     def decode(token):
-        if not TokenConfig.CRIPTOGRAFY_KEY:
+        if not TokenConfig.CRYPTOGRAPHY_KEY:
             logger.error(
                 "CRYPTOGRAFY_KEY is not set. Please set it in the environment or config file."
             )
@@ -15,13 +15,13 @@ class TokenCriptografy:
             )
         return jwt.decode(
             token,
-            TokenConfig.CRIPTOGRAFY_KEY,
+            TokenConfig.CRYPTOGRAPHY_KEY,
             algorithms=[ALGORITHM],
         )
 
     def encode(payload):
         return jwt.encode(
             payload,
-            TokenConfig.CRIPTOGRAFY_KEY,
+            TokenConfig.CRYPTOGRAPHY_KEY,
             algorithm=ALGORITHM,
         )

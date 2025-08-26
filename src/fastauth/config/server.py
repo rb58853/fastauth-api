@@ -33,8 +33,8 @@ class ConfigServer:
 
 
 class TokenConfig:
-    CRIPTOGRAFY_KEY: str = os.getenv("CRYPTOGRAFY_KEY", None) or config.get(
-        "criptografy-key", None
+    CRYPTOGRAPHY_KEY: str = os.getenv("CRYPTOGRAFY_KEY", None) or config.get(
+        "cryptography-key", None
     )
 
 

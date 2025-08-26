@@ -55,7 +55,7 @@ Project layout (high-level):
   - `middleware/websocket.py` — `websocket_middleware` decorator for WS protection.
   - `middleware/utils.py` — helpers for path checks, key validation and reading tokens from DB.
   - `utils/`
-    - `criptografy_key.py` — generates a Fernet key and optionally writes to `.env`.
+    - `cryptography_key.py` — generates a Fernet key and optionally writes to `.env`.
     - `envfile.py` — read/write helpers for `.env` variables.
     - `decode_token.py` — JWT encode/decode (uses `jose`).
   - `client_db/client_db.py` — HTTP client for external token persistence (GET/POST).
@@ -92,7 +92,7 @@ Example (`fastauth.config.example.json`):
     "app-name": "fastauth-api",
     "database-api-path": "http://127.0.0.1:6789/mydb/data",
     "master-token": "<your-master-token>",
-    "criptografy-key": "<your-32-byte-criptografy-key>",
+    "cryptography-key": "<your-32-byte-cryptography-key>",
     "master-token-paths": [ "/master" ],
     "access-token-paths": [ "/access" ]
 }
@@ -102,19 +102,19 @@ Primary fields:
 
 - `database-api-path`: base URL of the token persistence service (`GET`/`POST /token?client_id=...`).
 - `master-token`: privileged token for administrative routes.
-- `criptografy-key`: key used for signing/verifying JWTs (can also be provided via env var `CRIPTOGRAFY_KEY`).
+- `cryptography-key`: key used for signing/verifying JWTs (can also be provided via env var `CRYPTOGRAPHY_KEY`).
 - `master-token-paths`: route prefixes that require `MASTER-TOKEN`.
 - `access-token-paths`: route prefixes that require `ACCESS-TOKEN`.
 
 ### 2) Environment variables (alternative / precedence)
 
-- `CRIPTOGRAFY_KEY` — key used for JWT signing (used if not present in config file).
+- `CRYPTOGRAPHY_KEY` — key used for JWT signing (used if not present in config file).
 - `MASTER_TOKEN` — master token (used if not present in config file).
 
 Example `.env` (included in `examples/apps/basic_api/.env`):
 
 ```
-CRIPTOGRAFY_KEY=kAONxbkATfyk3...A6N4=
+CRYPTOGRAPHY_KEY=kAONxbkATfyk3...A6N4=
 MASTER_TOKEN=kAONxbkATfyk3...A6N4=
 ```
 
@@ -153,7 +153,7 @@ Provided by `TokenRouter`:
   - Returns a standardized JSON response with `{ client_id, access_token, refresh_token }`.
 
 - `GET /auth/token/refresh?refresh_token=<token>`
-  - Validates the provided refresh token (decodes with `CRIPTOGRAFY_KEY`).
+  - Validates the provided refresh token (decodes with `CRYPTOGRAPHY_KEY`).
   - If valid, issues a new token pair for the `client_id` contained in the refresh token.
   - Uses standard HTTP codes and structured error messages on failure.
 
@@ -201,7 +201,7 @@ Client usage (`client_db.client_db`):
 
 ## Utilities
 
-- `generate_criptografy_key(add2env: bool = True)` (`fastauth.utils.criptografy_key`)
+- `generate_cryptography_key(add2env: bool = True)` (`fastauth.utils.cryptography_key`)
   - Generates a Fernet key (`Fernet.generate_key().decode()`).
   - Optionally writes the key to a `.env` file using `utils.envfile.write_key`.
   - If the key already exists, the interactive tool prompts for replacement when run interactively.
@@ -212,7 +212,7 @@ Client usage (`client_db.client_db`):
   - `key_in(name, file_path=".env")` — returns `True` if the variable exists.
 
 - `TokenCriptografy` (`fastauth.utils.decode_token`)
-  - `encode(payload)` and `decode(token)` using `jose.jwt` with `TokenConfig.CRIPTOGRAFY_KEY`.
+  - `encode(payload)` and `decode(token)` using `jose.jwt` with `TokenConfig.CRYPTOGRAPHY_KEY`.
   - If the key is not configured, an error is logged and an exception is raised.
 
 ## OpenAPI / Swagger
@@ -242,15 +242,15 @@ Client usage (`client_db.client_db`):
 ## Security Best Practices
 
 - Always deploy behind HTTPS to protect tokens in transit.
-- Keep `CRIPTOGRAFY_KEY` and `MASTER_TOKEN` out of version control (use `.env` or secret manager).
+- Keep `CRYPTOGRAPHY_KEY` and `MASTER_TOKEN` out of version control (use `.env` or secret manager).
 - Limit the use of `MASTER_TOKEN` to administrative operations only.
-- Plan and document key rotation and migration for persisted tokens if `CRIPTOGRAFY_KEY` changes.
+- Plan and document key rotation and migration for persisted tokens if `CRYPTOGRAPHY_KEY` changes.
 - Store refresh tokens securely on clients (e.g., HttpOnly cookies for browsers).
 - Protect the token persistence API with authentication, IP whitelisting or firewall rules.
 
 ## Roadmap / TODO
 
-- Secure migration of persisted tokens when rotating `CRIPTOGRAFY_KEY`.
+- Secure migration of persisted tokens when rotating `CRYPTOGRAPHY_KEY`.
 - Support for multiple token payload formats.
 - Improve and document the WebSocket decorator.
 - Add automated tests and CI.

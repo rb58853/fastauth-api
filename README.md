@@ -1,20 +1,19 @@
 # Fastauth-api
-
 <div align = center>
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
 [![Version](https://img.shields.io/pypi/v/fastauth-api?color=%2334D058&label=Version)](https://pypi.org/project/fastauth-api)
+[![PyPI Downloads](https://static.pepy.tech/badge/fastauth-api)](https://pepy.tech/projects/fastauth-api)
 [![Stars](https://img.shields.io/github/stars/rb58853/fastauth-api?style=flat&logo=github)](https://github.com/rb58853/fastauth-api/stargazers)
 [![Forks](https://img.shields.io/github/forks/rb58853/fastauth-api?style=flat&logo=github)](https://github.com/rb58853/fastauth-api/network/members)
-[![Contributors](https://img.shields.io/github/contributors/rb58853/fastauth-api)](https://github.com/rb58853/fastauth-api/graphs/contributors)
-[![Commit activity](https://img.shields.io/github/commit-activity/m/rb58853/fastauth-api)](https://github.com/rb58853/fastauth-api/commits)
 [![Last commit](https://img.shields.io/github/last-commit/rb58853/fastauth-api.svg?style=flat)](https://github.com/rb58853/fastauth-api/commits)
-[![MSeeP](https://img.shields.io/badge/Fastapi-Middelware-009688)](https://fastapi.tiangolo.com/tutorial/middleware/)
-<!-- [![PyPI Downloads](https://static.pepy.tech/badge/fastauth-api)](https://pepy.tech/projects/fastauth-api) -->
+[![Fastapi](https://img.shields.io/badge/Fastapi-Middelware-009688)](https://fastapi.tiangolo.com/tutorial/middleware/)
+<!-- [![Commit activity](https://img.shields.io/github/commit-activity/m/rb58853/fastauth-api)](https://github.com/rb58853/fastauth-api/commits) -->
+<!-- [![Contributors](https://img.shields.io/github/contributors/rb58853/fastauth-api)](https://github.com/rb58853/fastauth-api/graphs/contributors) -->
 
 </div>
 
-Fastauth-api is an authentication middleware designed to integrate with `FastAPI` applications. It provides generation and management of access and refresh tokens, as well as utilities for encryption and secure key management. It is intended to simplify implementing token-based authentication policies and storing tokens in a generic backend exposed via a REST API.
+`Fastauth-api` is an authentication middleware designed to integrate with `FastAPI` applications. It provides generation and management of access and refresh tokens, as well as utilities for encryption and secure key management. It is intended to simplify implementing token-based authentication policies and storing tokens in a generic backend exposed via a **REST API**.
 
 ## Table of Contents
 
@@ -271,7 +270,7 @@ The package exposes a router with two public endpoints for generating and renewi
 
 ## License
 
-Project under the MIT license. See the LICENSE file for details.
+Project under the MIT license. See the [LICENSE](LICENSE) file for details.
 
 ---
 <div align = center>

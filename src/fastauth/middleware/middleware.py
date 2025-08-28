@@ -17,7 +17,7 @@ class AccessTokenMiddleware(BaseHTTPMiddleware):
 
     ### 1. Master token check
         - Trigger: require_master_token(request) returns True.
-        - Expected header: "master_token".
+        - Expected header: "MASTER-TOKEN".
         - Validation: header value is compared to ConfigServer.MASTER_TOKEN.
         - Failure: returns a JSONResponse with HTTP 401 and detail "Unauthorized Master Token".
 
@@ -53,7 +53,7 @@ class AccessTokenMiddleware(BaseHTTPMiddleware):
 
     ### Notes and considerations
     - This middleware is asynchronous and intended for ASGI apps (e.g., FastAPI).
-    - Header names are expected exactly as "master_token" and "ACCESS-TOKEN".
+    - Header names are expected exactly as "MASTER-TOKEN" and "ACCESS-TOKEN".
     - Comparisons are strict equality checks; ensure token formats match exactly.
     """
 
@@ -72,7 +72,7 @@ class AccessTokenMiddleware(BaseHTTPMiddleware):
 
     def __check_master(self, req: Request) -> Response | None:
         if require_master_token(req):
-            master_token: str = req.headers.get("master_token")
+            master_token: str = req.headers.get("MASTER-TOKEN")
             required_token: str = ConfigServer.MASTER_TOKEN
 
             if master_token != required_token or master_token is None:

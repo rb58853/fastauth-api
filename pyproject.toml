@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "fastauth-api"
-version = "0.0.3"
+version = "0.0.4"
 authors = [{ name = "Raúl Beltrán Gómez", email = "rb58853@gmail.com" }]
 description = ""
 readme = "README.md"

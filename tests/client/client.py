@@ -23,7 +23,7 @@ class Client:
 
         headers: dict = {}
         if self.master_token is not None:
-            headers["master_token"] = self.master_token
+            headers["MASTER-TOKEN"] = self.master_token
         if self.access_token is not None:
             headers["ACCESS-TOKEN"] = self.access_token
 

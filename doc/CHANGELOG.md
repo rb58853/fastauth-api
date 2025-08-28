@@ -2,7 +2,7 @@
 
 ## version 0.0.3 ⚙️
 
-- **Nueva estructura** La funcion `def set_auth()` fue sutituida por una nueva clase llamada [`Fastauth()`](../src/fastauth/app.py). Ahora se debe usar de la forma `Fastauth().set_auth(...)`.
+- **🏗️ New Structure**: The `set_auth()` function has been replaced with a new class called [`Fastauth()`](../src/fastauth/app.py). From now on, it should be used in the way `Fastauth().set_auth(...)`.
 
 - **⚙️ Customizable *FastauthSettings* via Parameters**: The `FastauthSettings` can now be customized through parameters. It is possible to pass [settings](../src/fastauth/app.py) directly to the class:  `Fastauth(settings: FastauthSettings | dict)`. These options follow **exactly the same configuration and format** as defined in the [`fastauth.config`](../fastauth.config.example.json) file.
 

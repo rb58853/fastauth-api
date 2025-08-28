@@ -17,7 +17,7 @@ class FastauthSettings(BaseModel):
 
 
 class Fastauth:
-    def __init__(self, settings: FastauthSettings | None = None):
+    def __init__(self, settings: FastauthSettings | dict | None = None):
         if isinstance(settings, dict):
             settings = FastauthSettings(**settings)
         self.__update_settings(settings)

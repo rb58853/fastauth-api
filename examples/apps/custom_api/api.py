@@ -1,11 +1,19 @@
 from fastapi import FastAPI
-from fastauth import Fastauth
-from pydantic import BaseModel
+from fastauth import Fastauth, FastauthSettings
 from fastapi.responses import RedirectResponse
 
 
 app = FastAPI(root_path="/test-api")
-auth = Fastauth()
+settings = {
+    "app_name": "fastauth",
+    "database_api_path": "http://127.0.0.1:6789/mydb/data",
+    "master_token": "kAONxbkATfyk3kmnUhw7YyAMotmvuJ6tVsuT1w3A6N4=",
+    "cryptography_key": "kAONxbkATfyk3kmnUhw7YyAMotmvuJ6tVsuT1w3A6N4=",
+    "headers": {},
+    "master_token_paths": ["/master"],
+    "access_token_paths": ["/access"],
+}
+auth = Fastauth(settings=settings)
 auth.set_auth(app)
 
 

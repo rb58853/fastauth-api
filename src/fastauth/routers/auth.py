@@ -219,19 +219,26 @@ class BaseTokenGeneration:
             refresh_token_payload, CRYPTOGRAFY_KEY, algorithm=ALGORITHM
         )
 
-        save_token(
+        save = save_token(
             client_id=client_id,
             access_token=access_token,
             refresh_token=refresh_token,
         )
-
-        return standard_response(
-            status="success",
-            message="Token generated",
-            code=HTTPStatus.OK,
-            data={
-                "client_id": client_id,
-                "access_token": access_token,
-                "refresh_token": refresh_token,
-            },
-        )
+        if save:
+            return standard_response(
+                status="success",
+                message="Token generated",
+                code=HTTPStatus.OK,
+                data={
+                    "client_id": client_id,
+                    "access_token": access_token,
+                    "refresh_token": refresh_token,
+                },
+            )
+        else:
+            return standard_response(
+                status="error",
+                message="Token not saved. Database error",
+                code=HTTPStatus.INTERNAL_SERVER_ERROR,
+                data={"client_id": client_id},
+            )

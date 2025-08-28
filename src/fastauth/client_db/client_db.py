@@ -2,12 +2,6 @@ import httpx
 from typing import Optional
 from ..config import logger, DatabaseConfig
 
-DATABASE_API_URL: str = (
-    DatabaseConfig.PATH
-    if DatabaseConfig.PATH is not None
-    else "http://localhost:6789/mydb/data"
-)
-
 
 def save_token(
     client_id: str,
@@ -25,6 +19,11 @@ def save_token(
     Returns:
         bool: True if the tokens were saved successfully, False otherwise.
     """
+
+    DATABASE_API_URL: str = DatabaseConfig.PATH
+    if DATABASE_API_URL is None:
+        logger.error("Database API URL is not configured.")
+        return False
     url: str = f"{DATABASE_API_URL}/token?client_id={client_id}"
     payload: dict = {"access_token": access_token, "refresh_token": refresh_token}
     data: dict = {"data": payload}
@@ -42,6 +41,12 @@ def load_access_token(client_id: str) -> Optional[str]:
     Returns:
         Optional[str]: The access token if found, None otherwise.
     """
+
+    DATABASE_API_URL: str = DatabaseConfig.PATH
+    if DATABASE_API_URL is None:
+        logger.error("Database API URL is not configured.")
+        return None
+
     url = f"{DATABASE_API_URL}/token?client_id={client_id}"
     try:
         response = httpx.get(url)
@@ -66,6 +71,12 @@ def load_refresh_token(client_id: str) -> Optional[str]:
     Returns:
         Optional[str]: The refresh token if found, None otherwise.
     """
+
+    DATABASE_API_URL: str = DatabaseConfig.PATH
+    if DATABASE_API_URL is None:
+        logger.error("Database API URL is not configured.")
+        return None
+
     url = f"{DATABASE_API_URL}/token?client_id={client_id}"
     response = httpx.get(url)
     if response.status_code == 200:

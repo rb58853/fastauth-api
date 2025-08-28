@@ -1,9 +1,10 @@
 from fastapi import FastAPI
 from fastapi.responses import RedirectResponse
-from fastauth import set_auth
+from fastauth import Fastauth
 
 app = FastAPI(root_path="/test-api")
-set_auth(app)
+auth = Fastauth()
+auth.set_auth(app)
 
 
 @app.get("/")

@@ -9,14 +9,14 @@ Fastauth — Token-based authentication for FastAPI.
 [documentation](https://github.com/rb58853/fastauth-api)
 """
 
-from .quick_app import set_auth
+from .app import Fastauth
 from .routers.auth import TokenRouter
 from .openapi.openapi import FastauthOpenAPI
 from .middleware import AccessTokenMiddleware, websocket_middleware, TokenType
 
 
 __all__ = [
-    "set_auth",
+    "Fastauth",
     "TokenRouter",
     "AccessTokenMiddleware",
     "FastauthOpenAPI",

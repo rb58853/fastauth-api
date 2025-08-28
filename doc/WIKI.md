@@ -126,17 +126,18 @@ Minimal example (`examples/apps/basic_api/api.py`):
 
 ```py
 from fastapi import FastAPI
-from fastauth import set_auth
+from fastauth import Fastauth
 
 app = FastAPI(root_path="/test-api")
-set_auth(app)  # applies middleware, routers and custom OpenAPI
+auth=Fastauth()
+auth.set_auth(app)  # applies middleware, routers and custom OpenAPI
 
 @app.get("/")
 async def root():
         return RedirectResponse(url="/docs")
 ```
 
-`set_auth` performs:
+`auth.set_auth` performs:
 
 - Adds `AccessTokenMiddleware` to the app.
 - Replaces `app.openapi` with Fastauth's OpenAPI builder.
@@ -223,7 +224,7 @@ Client usage (`client_db.client_db`):
   - `AccessTokenHeader` — `apiKey`, in: `header`, name: `ACCESS-TOKEN`
   - `MasterTokenHeader` — `apiKey`, in: `header`, name: `MASTER-TOKEN`
 - Applies the security scheme to all endpoints by default (both headers).
-- `set_auth(app)` overrides `app.openapi` with this implementation.
+- `auth.set_auth(app)` overrides `app.openapi` with this implementation.
 
 ## Included Examples
 

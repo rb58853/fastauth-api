@@ -1,10 +1,11 @@
-from fastauth import set_auth
+from fastauth import Fastauth
 from fastapi.responses import RedirectResponse
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from fastauth.middleware.websocket import websocket_middleware, TokenType
 
 app = FastAPI(root_path="/test-api")
-set_auth(app)
+auth = Fastauth()
+auth.set_auth(app)
 
 
 @app.get("/")

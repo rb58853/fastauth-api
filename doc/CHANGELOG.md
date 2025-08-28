@@ -7,7 +7,7 @@
 ## version 0.0.1 (Start Project) 🌟
 
 - **🔐 Token-based authentication system (Access + Refresh) with endpoints ready:** check the `/auth` router and the `/token/new` and `/token/refresh` endpoints in [auth.py](src/fastauth/routers/auth.py).
-- **⚙️ Easy integration with `FastAPI`:** function [`set_auth(app)`](src/fastauth/quick_app.py) applies middleware, registers routes and replaces the OpenAPI with FastauthOpenAPI.
+- **⚙️ Easy integration with `FastAPI`:** function [`Fastauth().set_auth(app)`](src/fastauth/quick_app.py) applies middleware, registers routes and replaces the OpenAPI with FastauthOpenAPI.
 - **🛡 Configurable middleware:** Master / Access level protection based on routes defined in the configuration. Supports validation of MASTER-TOKEN and ACCESS-TOKEN headers.
 - **🧾 Flexible configuration:** values from `fastauth.config.json` or environment variables (`.env`).
 - **🔑 Basic key management and utilities:**

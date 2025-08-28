@@ -125,10 +125,11 @@ Minimal integration example:
 
 ```python
 from fastapi import FastAPI
-from fastauth import set_auth
+from fastauth import Fastauth
 
 app = FastAPI(root_path="/test-api")
-set_auth(app)
+auth = Fastauth()
+auth.set_auth(app)
 
 @app.get("/health")
 async def health_check():
@@ -143,7 +144,7 @@ async def master_health_check():
         return {"service": "master health that need master token", "status": "healthy"}
 ```
 
-`set_auth(app)` applies the middleware and the routers required for issuing and verifying tokens according to the configuration.
+`auth.set_auth(app)` applies the middleware and the routers required for issuing and verifying tokens according to the configuration.
 
 [see more examples](./examples/EXAMPLES.md)
 
@@ -255,7 +256,7 @@ The package exposes a router with two public endpoints for generating and renewi
 ## Version status
 
 - **🔐 Token-based authentication system (Access + Refresh) with endpoints ready:** check the `/auth` router and the `/token/new` and `/token/refresh` endpoints in [auth.py](src/fastauth/routers/auth.py).
-- **⚙️ Easy integration with `FastAPI`:** function [`set_auth(app)`](src/fastauth/quick_app.py) applies middleware, registers routes and replaces the OpenAPI with FastauthOpenAPI.
+- **⚙️ Easy integration with `FastAPI`:** function [`Fastauth().set_auth(app)`](src/fastauth/app.py) applies middleware, registers routes and replaces the OpenAPI with FastauthOpenAPI.
 - **🛡 Configurable middleware:** Master / Access level protection based on routes defined in the configuration. Supports validation of MASTER-TOKEN and ACCESS-TOKEN headers.
 - **🧾 Flexible configuration:** values from `fastauth.config.json` or environment variables (`.env`).
 - **🔑 Basic key management and utilities:**

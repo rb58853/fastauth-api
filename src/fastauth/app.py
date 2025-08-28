@@ -3,20 +3,33 @@ from .middleware import AccessTokenMiddleware
 from .openapi import FastauthOpenAPI
 from .routers import TokenRouter
 from .config import DatabaseConfig, ConfigServer, TokenConfig
+from pydantic import BaseModel
+
+
+class FastauthSettings(BaseModel):
+    app_name: str = "fastauth"
+    database_api_path: str | None = None
+    master_token: str | None = None
+    cryptography_key: str | None = None
+    headers: dict | None = None
+    master_token_paths: list | None = []
+    access_token_paths: list | None = []
 
 
 class Fastauth:
-    def __init__(self, config: dict | None = None):
-        self.__update_config(config)
+    def __init__(self, settings: FastauthSettings | None = None):
+        if isinstance(settings, dict):
+            settings = FastauthSettings(**settings)
+        self.__update_settings(settings)
 
-    def __update_config(self, config: dict | None):
-        if config is not None:
-            database_path = config.get("database-api-path", None)
-            master_token = config.get("master-token", None)
-            cryptography_key = config.get("cryptography-key", None)
-            headers = config.get("headers", None)
-            master_token_paths = config.get("master-token-paths", [])
-            access_token_paths = config.get("access-token-paths", [])
+    def __update_settings(self, settings: FastauthSettings | None):
+        if settings is not None:
+            database_path = settings.database_api_path
+            master_token = settings.master_token
+            cryptography_key = settings.cryptography_key
+            headers = settings.headers
+            master_token_paths = settings.master_token_paths or []
+            access_token_paths = settings.access_token_paths or []
 
             DatabaseConfig.PATH = database_path or DatabaseConfig.PATH
             ConfigServer.MASTER_TOKEN = master_token or ConfigServer.MASTER_TOKEN
@@ -39,7 +52,7 @@ class Fastauth:
 
         Args:
             fastapp : FastAPI
-                The FastAPI application to configure.
+                The FastAPI application to settingsure.
             routers : list[APIRouter], optional
                 Routers to include (default: TokenRouter().route).
 

@@ -56,18 +56,18 @@ Create in the project root a file named `fastauth.config.json` with the minimal 
 
 ```json
 {
-    "app-name": "fastauth",
+    "app_name": "fastauth",
     "database-api-url": "http://127.0.0.1:8000/mydb/data",
-    "master-token": "<your-master-token>",
-    "cryptography-key": "<your-32-byte-cryptography-key>",
+    "master_token": "<your-master-token>",
+    "cryptography_key": "<your-32-byte-cryptography-key>",
     "headers": {
         "custom-header": "value",
         "...": "..."
     },
-    "master-token-paths": [
+    "master_token_paths": [
         "list of your root endpoints that need master token for use"
     ],
-    "access-token-paths": [
+    "access_token_paths": [
         "list of your root endpoints that need access token for use"
     ]
 }
@@ -263,7 +263,7 @@ The package exposes a router with two public endpoints for generating and renewi
   - Generate `CRYPTOGRAPHY_KEY` with `generate_cryptography_key()`.
   - Read/write variables in `.env` using `writekey2env(...)`.
 - 🧠 JWT tokens signed with HS256 and payloads containing `client_id`, `type`, `iat`, `exp`.
-- **💾 Decoupled token persistence:** `save_token` / `load_access_token` interact with an external API configurable via `"database-api-path"` in the configuration file.
+- **💾 Decoupled token persistence:** `save_token` / `load_access_token` interact with an external API configurable via `"database_api_path"` in the configuration file.
 - **🔌 WebSocket support:** authentication decorator for websockets (checks ACCESS-TOKEN or MASTER-TOKEN in headers).
 - **🧰 Extensible:** `TokenRouter` can be extended to customize token generation/renewal; middleware and OpenAPI are easily replaceable/adjustable.
 

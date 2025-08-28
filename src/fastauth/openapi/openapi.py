@@ -34,7 +34,7 @@ class FastauthOpenAPI:
             },
             "MasterTokenHeader": {
                 "type": "apiKey",
-                "name": "MASTER-TOKEN",
+                "name": "master_token",
                 "in": "header",
             },
         }

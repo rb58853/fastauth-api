@@ -19,7 +19,7 @@ def websocket_middleware(token_type: TokenType = TokenType.ACCESS):
     - `TokenType.ACCESS` (default): expects header "ACCESS-TOKEN", decodes it, verifies the client_id
         and compares the token against the stored access key. On failure it calls the connection
         disconnect helper and prevents the handler from executing.
-    - `TokenType.MASTER`: expects header "MASTER-TOKEN" and compares it to ConfigServer.MASTER_TOKEN.
+    - `TokenType.MASTER`: expects header "master_token" and compares it to ConfigServer.MASTER_TOKEN.
         On mismatch it disconnects the client and prevents handler execution.
 
     ### Parameters
@@ -62,7 +62,7 @@ def websocket_middleware(token_type: TokenType = TokenType.ACCESS):
                     await disconnect(websocket=websocket)
 
             if token_type == TokenType.MASTER:
-                token = websocket.headers.get("MASTER-TOKEN")
+                token = websocket.headers.get("master_token")
                 master_token: str = ConfigServer.MASTER_TOKEN
 
                 if token is None or master_token != token:

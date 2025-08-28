@@ -14,6 +14,6 @@
   - Generate `CRYPTOGRAPHY_KEY` with `generate_cryptography_key()`.
   - Read/write variables in `.env` using `writekey2env(...)`.
 - 🧠 JWT tokens signed with HS256 and payloads containing `client_id`, `type`, `iat`, `exp`.
-- **💾 Decoupled token persistence:** `save_token` / `load_access_token` interact with an external API configurable via `"database-api-path"` in the configuration file.
+- **💾 Decoupled token persistence:** `save_token` / `load_access_token` interact with an external API configurable via `"database_api_path"` in the configuration file.
 - **🔌 WebSocket support:** authentication decorator for websockets (checks ACCESS-TOKEN in headers).
 - **🧰 Extensible:** `TokenRouter` can be extended to customize token generation/renewal; middleware and OpenAPI are easily replaceable/adjustable.

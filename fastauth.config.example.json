@@ -1,16 +1,16 @@
 {
-    "app-name": "fastauth-api",
-    "database-api-path": "http://127.0.0.1:6789/mydb/data",
-    "master-token": "<your-master-token>",
-    "cryptography-key": "<your-cryptography-key>",
+    "app_name": "fastauth-api",
+    "database_api_path": "http://127.0.0.1:6789/mydb/data",
+    "master_token": "<your-master-token>",
+    "cryptography_key": "<your-cryptography-key>",
     "headers": {
         "custom-header": "value",
         "...": "..."
     },
-    "master-token-paths": [
+    "master_token_paths": [
         "list of your root endpoints that need master token for use"
     ],
-    "access-token-paths": [
+    "access_token_paths": [
         "list of your root endpoints that need access token for use"
     ]
 }

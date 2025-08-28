@@ -89,12 +89,12 @@ Example (`fastauth.config.example.json`):
 
 ```json
 {
-    "app-name": "fastauth-api",
-    "database-api-path": "http://127.0.0.1:6789/mydb/data",
-    "master-token": "<your-master-token>",
-    "cryptography-key": "<your-32-byte-cryptography-key>",
-    "master-token-paths": [ "/master" ],
-    "access-token-paths": [ "/access" ]
+    "app_name": "fastauth-api",
+    "database_api_path": "http://127.0.0.1:6789/mydb/data",
+    "master_token": "<your-master-token>",
+    "cryptography_key": "<your-32-byte-cryptography-key>",
+    "master_token_paths": [ "/master" ],
+    "access_token_paths": [ "/access" ]
 }
 ```
 

@@ -1,6 +1,23 @@
 # Changelog
 
-## version 0.0.2 ⚙️
+## version 0.0.3 ⚙️
+
+- **Nueva estructura** La funcion `def set_auth()` fue sutituida por una nueva clase llamada [`Fastauth()`](../src/fastauth/app.py). Ahora se debe usar de la forma `Fastauth().set_auth(...)`.
+
+- **⚙️ Customizable *FastauthSettings* via Parameters**: The `FastauthSettings` can now be customized through parameters. It is possible to pass [settings](../src/fastauth/app.py) directly to the class:  `Fastauth(settings: FastauthSettings | dict)`. These options follow **exactly the same configuration and format** as defined in the [`fastauth.config`](../fastauth.config.example.json) file.
+
+  ```python
+  class FastauthSettings(BaseModel):
+      app_name: str = "fastauth-api"
+      database_api_path: str | None = None
+      master_token: str | None = None
+      cryptography_key: str | None = None
+      headers: dict | None = None
+      master_token_paths: list | None = []
+      access_token_paths: list | None = []
+  ```
+
+## version 0.0.2 🔌
 
 - **🔌Master Token WebSocket integration**: Master token integration for using the WebSocket decorator. You can now choose between access or master token. [see example](../examples/apps/websocket_api/api.py)
 

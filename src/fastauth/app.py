@@ -7,7 +7,7 @@ from pydantic import BaseModel
 
 
 class FastauthSettings(BaseModel):
-    app_name: str = "fastauth"
+    app_name: str = "fastauth-api"
     database_api_path: str | None = None
     master_token: str | None = None
     cryptography_key: str | None = None

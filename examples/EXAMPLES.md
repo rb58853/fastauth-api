@@ -10,6 +10,10 @@
 
 **File:** [examples/apps/websocket_api](./apps/websocket_api/api.py)
 
+### Custom API
+
+**File:** [examples/apps/custom_api](./apps/custom_api/api.py)
+
 ## Databases
 
 ### Simple JsonDB

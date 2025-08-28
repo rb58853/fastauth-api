@@ -1,4 +1,5 @@
 # Fastauth-api
+
 <div align = center>
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
@@ -95,6 +96,51 @@ MASTER_TOKEN=kAONxbkATfyk3kmnUhw7YyAMotmvuJ6tVsuT1w3A6N4=
 ```
 
 When both sources (config file and environment variables) are available, the value in the config file has priority.
+
+## Customizable *FastauthSettings* via Parameters
+
+The `FastauthSettings` can now be customized through parameters. It is possible to pass [settings](./src/fastauth/app.py) directly to the class:  `Fastauth(settings: FastauthSettings | dict)`. These options follow **exactly the same configuration and format** as defined in the [`fastauth.config`](./fastauth.config.example.json) file.
+
+  ```python
+  class FastauthSettings(BaseModel):
+      app_name: str = "fastauth-api"
+      database_api_path: str | None = None
+      master_token: str | None = None
+      cryptography_key: str | None = None
+      headers: dict | None = None
+      master_token_paths: list | None = []
+      access_token_paths: list | None = []
+  ```
+
+### Fastauth
+
+```python
+class Fastauth:
+    def __init__(self, settings: FastauthSettings | dict | None = None):
+        if isinstance(settings, dict):
+            settings = FastauthSettings(**settings)
+        ...    
+```
+
+### Usage example
+
+```python
+from fastapi import FastAPI
+from fastauth import Fastauth, FastauthSettings
+
+app = FastAPI(root_path="/test-api")
+settings = {
+    "app_name": "fastauth",
+    "database_api_path": "http://127.0.0.1:6789/mydb/data",
+    "master_token": "kAONxbkATfyk3kmnUhw7YyAMotmvuJ6tVsuT1w3A6N4=",
+    "cryptography_key": "kAONxbkATfyk3kmnUhw7YyAMotmvuJ6tVsuT1w3A6N4=",
+    "headers": {},
+    "master_token_paths": ["/master"],
+    "access_token_paths": ["/access"],
+}
+auth = Fastauth(settings=settings)
+auth.set_auth(app)
+```
 
 ## Key and token generation (utilities)
 
@@ -258,7 +304,7 @@ The package exposes a router with two public endpoints for generating and renewi
 - **🔐 Token-based authentication system (Access + Refresh) with endpoints ready:** check the `/auth` router and the `/token/new` and `/token/refresh` endpoints in [auth.py](src/fastauth/routers/auth.py).
 - **⚙️ Easy integration with `FastAPI`:** function [`Fastauth().set_auth(app)`](src/fastauth/app.py) applies middleware, registers routes and replaces the OpenAPI with FastauthOpenAPI.
 - **🛡 Configurable middleware:** Master / Access level protection based on routes defined in the configuration. Supports validation of MASTER-TOKEN and ACCESS-TOKEN headers.
-- **🧾 Flexible configuration:** values from `fastauth.config.json` or environment variables (`.env`).
+- **🧾 Flexible configuration:** values from `fastauth.config.json`, environment variables (`.env`) or custom [`FastauthSettings`](./src/fastauth/app.py).
 - **🔑 Basic key management and utilities:**
   - Generate `CRYPTOGRAPHY_KEY` with `generate_cryptography_key()`.
   - Read/write variables in `.env` using `writekey2env(...)`.

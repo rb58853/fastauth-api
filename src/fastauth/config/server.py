@@ -14,7 +14,7 @@ if ConfigFile.DATA == {}:
         with open(ConfigFile.PATH, "r") as f:
             ConfigFile.DATA = json.load(f)
     except FileNotFoundError:
-        logger.error(
+        logger.warning(
             "Configuration file not found. Please create '.fastauth.config.json' or pass settings via paramaters in `Fastauth()`"
         )
 

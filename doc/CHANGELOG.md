@@ -1,5 +1,10 @@
 # Changelog
 
+## version 0.0.4 🔧
+
+- **🔧 Fix little bugs in config:**
+  - `ConfigDatabase.PATH` now work with settings via params.
+
 ## version 0.0.3 ⚙️
 
 - **🏗️ New Structure**: The `set_auth()` function has been replaced with a new class called [`Fastauth()`](../src/fastauth/app.py). From now on, it should be used in the way `Fastauth().set_auth(...)`.
